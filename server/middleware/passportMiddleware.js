@@ -4,6 +4,7 @@ const authenticateGoogle = passport.authenticate('google', { scope: ['profile', 
 
 
 const googleAuthCallback = passport.authenticate("google", {
+	// successRedirect: "http://localhost:5173",
 	successRedirect: "/auth/google/success",
 	failureRedirect: "http://localhost:3000/auth" // Redirect on authentication failure
 });
