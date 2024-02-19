@@ -30,7 +30,7 @@ import useShowToast from "../../hooks/useShowToast";
 import { useAxiosInstance } from "/api/axios";
 import tokenAtom from "@/atoms/tokenAtom";
 
-export default function SplitScreen() {
+export default function SplitScreen() { 
 	const setAuthScreen = useSetRecoilState(authScreenAtom);
 	const [showPassword, setShowPassword] = useState(false);
 	const setUser = useSetRecoilState(userAtom);
