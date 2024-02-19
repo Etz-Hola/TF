@@ -26,7 +26,7 @@ const NavBar = (props) => {
       bg={"#fff"}
       boxShadow='lg'
     >
-      <Image bg={"#fff"} src="/tflogo.png" borderRadius={8}  h={'70px'}/>
+      <Image bg={"#fff"} src="/tflogo.png" borderRadius={8}  />
       {/* <MenuToggle toggle={toggle} isOpen={isOpen} /> */}
       <MenuLinks isOpen={isOpen} />
     </NavBarContainer>
