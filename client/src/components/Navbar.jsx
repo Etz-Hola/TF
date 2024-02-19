@@ -96,7 +96,7 @@ const MenuLinks = ({ isOpen }) => {
         <MenuItem to="/login">
           <Link
             as={RouterLink}
-            // onClick={() => setAuthScreen("login")}
+            onClick={() => setAuthScreen("login")}
             to={"/auth"}
           >
             <Button
