@@ -12,9 +12,9 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 
 const NavBar = (props) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+//   const [isOpen, setIsOpen] = React.useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
+//   const toggle = () => setIsOpen(!isOpen);
 
   return (
     <NavBarContainer
