@@ -12,7 +12,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 
 const NavBar = (props) => {
-//   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
 //   const toggle = () => setIsOpen(!isOpen);
 
@@ -78,7 +78,7 @@ const MenuLinks = ({ isOpen }) => {
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
       flexBasis={{ base: "100%", md: "auto" }}
-      font-size= {{ base: "14px", md: "16px", lg: "18px" }}
+    //   font-size= {{ base: "14px", md: "16px", lg: "18px" }}
 
     >
       <Stack
@@ -125,14 +125,15 @@ const MenuLinks = ({ isOpen }) => {
               transition={"all 1s"}
               size={{base: 'sm', md: 'lg'}}
 
-              bg={"#2970ff"}
+            //   bg={"#2970ff"}
               _hover={{
                 bg: useColorModeValue("#599cff"),
               }}
-              color={"#f5f5f5"}
+            //   color={"#f5f5f5"}
             >
               Sign up
             </Button>
+            {/* <Button>Sign up</Button> */}
           </Link>
         </MenuItem>
       </Stack>
