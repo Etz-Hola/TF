@@ -148,7 +148,7 @@ const passwordReset = async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 };
-
+ 
 const confirmPasswordResetOTP = async (req, res) => {
   const { activation_token, activation_code } = req.body;
 
