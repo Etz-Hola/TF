@@ -136,7 +136,7 @@ const passwordReset = async (req, res) => {
       subject: "Reset your password",
       template: "password-reset-mail.ejs",
       data,
-    });
+    }); 
     res.status(201).json({
       success: true,
       message: `Please check your email ${user.email} to reset your password`,
