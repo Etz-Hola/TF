@@ -9,12 +9,9 @@ import {
   Heading,
   Input,
   Stack,
-  Image,
-  Link, 
+  Link,
   Box,
-  IconButton,
-  Divider,
-  AbsoluteCenter,
+  Checkbox,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
@@ -32,9 +29,8 @@ import tokenAtom from "@/atoms/tokenAtom";
 export default function SplitScreen() {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [showPassword, setShowPassword] = useState(false);
-  const setUser = useSetRecoilState(userAtom);
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const setUsers = useSetRecoilState(userAtom);
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [prevPath, setPrevPath] = useRecoilState(prevPathAtom);
@@ -49,17 +45,17 @@ export default function SplitScreen() {
     try {
       const response = await axiosInstance.post(
         "/auth/login",
-        JSON.stringify({ username, email, password })
+        JSON.stringify({ user, password })
       );
-      console.log(response.data.loggedInUser);
-      const loggedUser = response.data.loggedInUser;
-      const token = response.data.token;
+      console.log(response.data);
+      const loggedUser = response.data;
+      const token = response.data.accessToken;
 
       localStorage.setItem("user-workiq", JSON.stringify(loggedUser));
       localStorage.setItem("token", token);
 
       setToken(token);
-      setUser(loggedUser);
+      setUsers(loggedUser);
 
       const localStoragePrevPath = localStorage?.getItem("localPrevPath");
       // Redirect to the originally requested route (or a default route)
@@ -88,10 +84,10 @@ export default function SplitScreen() {
 
   const handleGoogleAuth = async () => {
     try {
-      const response = await axiosInstance.get("/auth/google");
+      const response = await axiosInstance.get("/auth/google/callback");
       const data = response.data;
       console.log(data);
-      navigate("/auth/google-verify");
+      // navigate("/auth/google-verify");
     } catch (error) {
       console.log(error);
     }
@@ -135,9 +131,9 @@ export default function SplitScreen() {
                 >
                   <FormLabel>Email or username</FormLabel>
                   <Input
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value) || setUsername(e.target.value)}
-                    value={email || username}
+                    type={'text'}
+                    onChange={(e) => setUser(e.target.value)}
+                    value={user}
                     placeholder="example@mail.com"
                     border={"1px solid black"}
                     required
@@ -173,24 +169,30 @@ export default function SplitScreen() {
                     </InputRightElement>
                   </InputGroup>
                 </FormControl>
-
-                {/* <Stack spacing={10} pt={2}> */}
-                <Button
-                  loadingText="Signing in"
-                  w={{ base: "full", md: "400px", lg: "500px" }}
-                  // size={{ base: "lg", md: "md" }}
-                  bg={"blue.500"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.400",
-                  }}
-                  type="submit"
-                  isLoading={loading}
-                  mx="auto"
-                >
-                  Sign In
-                </Button>
-                {/* </Stack> */}
+                <Stack spacing={10}>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row' }}
+                    align={'start'}
+                    justify={'space-between'}>
+                    <Checkbox>Remember me</Checkbox>
+                    <Text color={'blue.400'}><Link href="/forget-password">Forgot password?</Link></Text>
+                  </Stack>
+                  <Button
+                    loadingText="Signing in"
+                    w={{ base: "full", md: "400px", lg: "500px" }}
+                    // size={{ base: "lg", md: "md" }}
+                    bg={"blue.500"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.400",
+                    }}
+                    type="submit"
+                    isLoading={loading}
+                    mx="auto"
+                  >
+                    Sign In
+                  </Button>
+                </Stack>
                 <Stack pt={6}>
                   <Text align={"center"}>
                     Don&apos;t have an account?{" "}
