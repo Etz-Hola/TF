@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <Routes>
-        
+      <Route path="/auth/google-verify" element={<GoogleAuth />} />
         <Route path="/" element={<HomePage />} />
         <Route path= "/homepage" element={<HomePage />} />
   
