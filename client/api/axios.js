@@ -1,4 +1,4 @@
-import tokenAtom from "@/atoms/tokenAtom";
+import tokenAtom from "../src/atoms/tokenAtom";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 

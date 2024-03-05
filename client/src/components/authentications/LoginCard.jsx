@@ -24,7 +24,7 @@ import userAtom from "../../atoms/userAtom";
 import { prevPathAtom } from "../../atoms/prevPathAtom";
 import useShowToast from "../../hooks/useShowToast";
 import { useAxiosInstance } from "/api/axios";
-import tokenAtom from "@/atoms/tokenAtom";
+import tokenAtom from "../../atoms/tokenAtom";
 
 export default function SplitScreen() {
   const setAuthScreen = useSetRecoilState(authScreenAtom);

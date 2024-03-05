@@ -93,15 +93,66 @@ export default function SplitScreen() {
 	};
 
 	return (
-		<Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
-			<Flex p={8} flex={1} align={"center"} justify={"center"} bg={"#f6f6f6"}>
+		<Stack bg={'blue.300'} minH={"100vh"} direction={{ base: "column", md: "row" }}>
+			<Flex
+				flexDir={{ base: "column-reverse", md: "column" }}
+				w={{ base: "full", md: "40%" }}
+			>
+				<Box
+					position="relative"
+					bgImage="url('/authImg.png')"
+					bgPosition="center"
+					bgRepeat="no-repeat"
+					bgSize="cover"
+					// h={"100vh"}
+					minH={"100vh"}
+					display={{ base: "none", md: "block" }}
+				>
+					<Box
+						pos={"absolute"}
+						fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+						fontWeight={{ base: "3xl", md: "4xl", lg: "5xl" }}
+						color="#fff"
+						py={3}
+						px={{ base: 4, md: 18 }}
+						display={{ base: "none", md: "block" }}
+					>
+						<Text
+							as={"h2"}
+							fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+							fontWeight={{ base: "3xl", md: "4xl", lg: "5xl" }}						
+						>
+							Ticket Flow
+						</Text>
+						<Flex gap={1} alignItems={"center"}>
+							<CheckIcon boxSize={4} />
+							<Text as={"h2"}>Will make it easier and better</Text>
+						</Flex>
+					</Box>
+				</Box>
+			</Flex>
+			<Flex p={8} flex={1} align={"center"} justify={"center"} bg={"blue.300"}>
 				<Stack spacing={4} w={"full"} maxW={"md"}>
 					<Heading>
-						<Text fontSize={"4xl"}>Sign up</Text>
-						<Text fontSize={"lg"} color={"#969696"}>
-							Sign up to enjoy the feature of WorkIQ.
-						</Text>
+						<Text align="center" fontSize={"4xl"}>Create an Acount</Text>
+						{/* <Text align="center" fontSize={"lg"} color={"#969696"}>
+							Sign up to enjoy the feature of Ticket-Flow.
+						</Text> */}
 					</Heading>
+					<Flex align={"center"} flexDir={"column"} gap={2}>
+						<Button
+							bg={"blue.300"}
+							border={"1px solid black"}
+							_hover={{ bg: "white" }}
+							size={{ base: "sm", md: "md" }}
+							leftIcon={<FcGoogle size={24} />}
+							color={"black"}
+							onClick={handleGoogleAuth}
+						>
+							Continue with Google
+						</Button>
+					</Flex>
+
 					<form onSubmit={handleSubmit} className='text-color blue.400'>
 						<Stack spacing={4}>
 							<Box maxW="500px" mx="auto">
@@ -111,8 +162,8 @@ export default function SplitScreen() {
 											<Input
 												type="text"
 												onChange={(e) => setUsername(e.target.value)}
-												placeholder="Username"
-												value={username}
+												placeholder="Your full name"
+												value={name}
 												color={"black"}
 												border={"1px solid black"}
 												required
@@ -222,65 +273,10 @@ export default function SplitScreen() {
 							</Stack>
 						</Stack>
 					</form>
-					<Flex align={"center"} flexDir={"column"} gap={2}>
-						<Button
-							// bg={"#3B82F6"}
-							border={"1px solid black"}
-							_hover={{ bg: "white" }}
-							size={{ base: "sm", md: "md" }}
-							leftIcon={<FcGoogle size={24} />}
-							color={"black"}
-							onClick={handleGoogleAuth}
-						>
-							Continue with Google
-						</Button>
-					</Flex>
+					
 				</Stack>
 			</Flex>
-			<Flex
-				flexDir={{ base: "column-reverse", md: "column" }}
-				w={{ base: "full", md: "40%" }}
-			>
-				<Box
-					position="relative"
-					bgImage="url('/authImg.png')"
-					bgPosition="center"
-					bgRepeat="no-repeat"
-					bgSize="cover"
-					// h={"100vh"}
-					minH={"100vh"}
-					display={{ base: "none", md: "block" }}
-				>
-					<Box
-						pos={"absolute"}
-						fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-						fontWeight={{ base: "3xl", md: "4xl", lg: "5xl" }}
-						color="#fff"
-						py={3}
-						px={{ base: 4, md: 18 }}
-						display={{ base: "none", md: "block" }}
-					>
-						<Text
-							as={"h2"}
-							fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
-							fontWeight={{ base: "3xl", md: "4xl", lg: "5xl" }}
-						>
-							Success starts here
-						</Text>
-						<Flex gap={1} alignItems={"center"}>
-							<CheckIcon boxSize={4} />
-							<Text as={"h2"}>Pay per project, not per hour</Text>
-						</Flex>
-						<Flex gap={1} alignItems={"center"}>
-							<CheckIcon boxSize={4} />
-							<Text as={"h2"}>Access to talent and businesses</Text>
-						</Flex>
-						<Text as={"h2"} textAlign={"center"}>
-							across the global
-						</Text>
-					</Box>
-				</Box>
-			</Flex>
+			
 		</Stack>
 	);
 }

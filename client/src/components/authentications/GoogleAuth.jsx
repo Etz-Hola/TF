@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { useAxiosInstance } from "../../../api/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Flex, Spinner, Text } from "@chakra-ui/react";
@@ -6,7 +6,7 @@ import useShowToast from "../../hooks/useShowToast";
 import { useRecoilState } from "recoil";
 import { prevPathAtom } from "../../atoms/prevPathAtom";
 import userAtom from "../../atoms/userAtom";
-import tokenAtom from "@/atoms/tokenAtom";
+import tokenAtom from "../../atoms/tokenAtom";
 
 const GoogleAuth = () => {
 	const navigate = useNavigate();

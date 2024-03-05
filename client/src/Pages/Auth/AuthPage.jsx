@@ -17,7 +17,7 @@ const AuthPage = () => {
 	return (
 		<Box as="section" bg={"#fff"}>
 			<> {authScreenState === "login" ? <LoginCard /> : <SignUpCard />} </>
-		</Box>
+		</Box> 
 	);
 };
 
