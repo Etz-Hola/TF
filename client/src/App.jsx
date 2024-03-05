@@ -31,6 +31,7 @@ function App() {
         <Route
         element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
       >
+
         <Route
         element={<RequireAuth allowedRoles={[...Object.values(ROLES.Admin, ROLES.Client)]} />}>
         
