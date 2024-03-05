@@ -6,8 +6,7 @@ const Header = () => {
     <>
       <header className='header'>
         <div>
-        <Link to='/'>Ticketflow</Link>          
-          
+        <Link to='/'>Ticketflow</Link>           
         </div>
 
         <Flex></Flex>

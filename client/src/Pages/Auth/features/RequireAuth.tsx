@@ -12,7 +12,7 @@ const RequireAuth = ({ allowedRoles }) => {
             : <Navigate to="/auth" state={{ from: location }} replace />
     );
 
-    return content;
+    return content; 
 };
 
 export default RequireAuth;
