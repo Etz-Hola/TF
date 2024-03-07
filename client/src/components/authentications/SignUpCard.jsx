@@ -30,7 +30,7 @@ export default function SplitScreen() {
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [email, setEmail] = useState("");
 	const [name, setName] = useState("");
-	const [username, setUsername] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
 	const setActivationToken = useSetRecoilState(activationToken)
 	const setUser = useSetRecoilState(userAtom);
 	const [password, setPassword] = useState("");
@@ -50,7 +50,7 @@ export default function SplitScreen() {
 		try {
 			const response = await axiosInstance.post(
 				"/auth/signup",
-				JSON.stringify({ name, username, email, password, confirmPassword })
+				JSON.stringify({ name, phoneNumber, email, password, confirmPassword })
 			);
 			// const loggedUser = response.data.loggedInUser;
 			const data = response.data;
@@ -157,21 +157,21 @@ export default function SplitScreen() {
 						<Stack spacing={4}>
 							<Box maxW="500px" mx="auto">
 								<HStack>
-									<Box>
+									{/* <Box>
 										<FormControl isRequired>
 											<Input
 												type="text"
 												onChange={(e) => setUsername(e.target.value)}
-												placeholder="Your full name"
-												value={name}
+												placeholder="Username"
+												value={username}
 												color={"black"}
 												border={"1px solid black"}
 												required
 											/>
 										</FormControl>
-									</Box>
+									</Box> */}
 									<Box>
-										<FormControl>
+										<FormControl isRequired my={5}>
 											<Input
 												type="text"
 												onChange={(e) => setName(e.target.value)}
@@ -180,10 +180,22 @@ export default function SplitScreen() {
 												color={"black"}
 												border={"1px solid black"}
 												required
+												w={"500px"}
 											/>
 										</FormControl>
 									</Box>
 								</HStack>
+
+								<FormControl isRequired my={5}>
+									<Input
+										type="phoneNumber"
+										onChange={(e) => setPhoneNumber(e.target.value)}
+										value={phoneNumber}
+										placeholder="phoneNumber"
+										border={"1px solid black"}
+										required
+									/>
+								</FormControl>
 
 								<FormControl isRequired my={5}>
 									<Input

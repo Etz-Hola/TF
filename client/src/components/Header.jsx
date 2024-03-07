@@ -1,15 +1,15 @@
-import { Flex, Link } from "@chakra-ui/react";
+import { Box, Flex, Image, Link } from "@chakra-ui/react";
 import React from "react";
 
 const Header = () => {
   return (
     <>
       <header className='header'>
-        <div>
-        <Link to='/'>Ticketflow</Link>           
-        </div>
+        <Box >        
+        <Image bg={"#fff"} src="/herrobag.png" borderRadius={8}  />
+        </Box>
 
-        <Flex></Flex>
+        <Box w='100%' h='200px' bgGradient='linear(to-r, green.200, pink.500)' />
 
 
       </header>

@@ -30,7 +30,7 @@ export default function SplitScreen() {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [showPassword, setShowPassword] = useState(false);
   const setUsers = useSetRecoilState(userAtom);
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [prevPath, setPrevPath] = useRecoilState(prevPathAtom);
@@ -45,7 +45,7 @@ export default function SplitScreen() {
     try {
       const response = await axiosInstance.post(
         "/auth/login",
-        JSON.stringify({ user, password })
+        JSON.stringify({ email, password })
       );
       console.log(response.data);
       const loggedUser = response.data;
@@ -66,7 +66,7 @@ export default function SplitScreen() {
         setPrevPath(null); // Clear the stored path
         navigate(prevPath);
       } else {
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (error) {
       if (error?.response?.status === 404) {
@@ -132,8 +132,8 @@ export default function SplitScreen() {
                   <FormLabel>Email or username</FormLabel>
                   <Input
                     type={'text'}
-                    onChange={(e) => setUser(e.target.value)}
-                    value={user}
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                     placeholder="example@mail.com"
                     border={"1px solid black"}
                     required

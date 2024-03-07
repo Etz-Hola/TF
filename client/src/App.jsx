@@ -12,10 +12,11 @@ import HomePage from "./Pages/Landing page/HomePage";
 import SignUpCard from "./components/authentications/SignUpCard"
 import LoginCard from "./components/authentications/LoginCard"
 import RequireAuth from './Pages/Auth/features/RequireAuth';
+import userAtom from './atoms/userAtom';
 
 
 function App() {
-
+  // const user = userAtom
   return (
     <>
       <Routes>
@@ -33,8 +34,8 @@ function App() {
             element={<RequireAuth allowedRoles={[...Object.values(ROLES.Admin, ROLES.Client)]} />}>
           </Route>
         </Route>
+        {/* <Route path="/" element={<HomePage />} /> */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/homepage" element={<HomePage />} />
         <Route path="/signup" element={<SignUpCard />} />
         <Route path="/login" element={<LoginCard />} />
       </Routes>
