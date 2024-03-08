@@ -13,6 +13,7 @@ import SignUpCard from "./components/authentications/SignUpCard"
 import LoginCard from "./components/authentications/LoginCard"
 import RequireAuth from './Pages/Auth/features/RequireAuth';
 import userAtom from './atoms/userAtom';
+import Layout from './components/Layout/Layout';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Layout />
         <Route path="/auth/google-verify" element={<GoogleAuth />} />
         <Route path="/confirm-email" element={<AccountConfirmation />} />
         <Route path="/auth" element={<AuthPage />} />
