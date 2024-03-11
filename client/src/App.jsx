@@ -14,6 +14,7 @@ import LoginCard from "./components/authentications/LoginCard"
 import RequireAuth from './Pages/Auth/features/RequireAuth';
 import userAtom from './atoms/userAtom';
 import AboutPage from './Pages/AboutPage';
+import DashboardPage from './Pages/Dashboard/DashboardPage';
 
 
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/activate-verify" element={<AccountVerifyEmailForm />} />
         <Route path="/forget-password" element={<ForgetingPwd />} />
         <Route path="/activate-form" element={<VerifyEmailForm />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
 
         <Route
           element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}

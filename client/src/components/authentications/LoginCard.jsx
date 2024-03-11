@@ -66,7 +66,7 @@ export default function SplitScreen() {
         setPrevPath(null); // Clear the stored path
         navigate(prevPath);
       } else {
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (error) {
       if (error?.response?.status === 404) {
