@@ -31,8 +31,13 @@ const userSchema = new Schema(
 				type: String,
 				default: "User",
 			},
-			Admin: String,
 		},
+
+    isCompany: {
+      type: Boolean,
+      default: false
+    }
+  
 
   },
   {
