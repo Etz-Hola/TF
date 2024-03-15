@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const Company = require('../models/companyModel');
+const jwt = require("jsonwebtoken");
 
 exports.registerCompany = async (req, res) => {
   try {
@@ -34,3 +35,30 @@ exports.registerCompany = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+exports.loginCompany = async (req, res) => {
+    try {
+      // Check if a company with the provided email exists
+      const company = await Company.findOne({ email: req.body.email });
+      if (!company) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      // Verify the password
+      const isPasswordValid = await bcrypt.compare(req.body.password, company.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      // Generate JWT token
+      const token = jwt.sign({ companyId: company._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+      // Respond with the token
+      res.status(200).json({ token });
+    } catch (error) {
+      // Handle any errors that occur during login
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+  

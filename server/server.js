@@ -9,6 +9,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
+const companyRoutes = require("./routes/companyRoutes");
 const refreshRoute = require("./routes/refresh");
 require("./config/passport-setup");
 
@@ -53,6 +54,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/refresh", refreshRoute);
+app.use("/company", companyRoutes);
 
 mongoose
 	.connect(process.env.MONGO_URI)
