@@ -15,6 +15,8 @@ import RequireAuth from './Pages/Auth/features/RequireAuth';
 import userAtom from './atoms/userAtom';
 import AboutPage from './Pages/AboutPage';
 import DashboardPage from './Pages/Dashboard/DashboardPage';
+import CompanySignUp from './components/authentications/CompanySignUp';
+import CompanyLogin from './components/authentications/CompanyLogin';
 
 
 
@@ -45,7 +47,9 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
 
         <Route path="/signup" element={<SignUpCard />} />
+        <Route path="/companysignup" element={<CompanySignUp />} />
         <Route path="/login" element={<LoginCard />} />
+        <Route path="/companylogin" element={<CompanyLogin />} />
       </Routes>
     </>
   )

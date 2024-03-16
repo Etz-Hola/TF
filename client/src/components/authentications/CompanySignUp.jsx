@@ -29,8 +29,10 @@ export default function SplitScreen() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [email, setEmail] = useState("");
-	const [name, setName] = useState("");
-	const [phoneNumber, setPhoneNumber] = useState("");
+	const [companyName, setCompanyName] = useState("");
+	// const [phoneNumber, setPhoneNumber] = useState("");
+	const [contactPerson, setContactPerson] = useState("");
+	const [transportationType, setTransportationType] = useState("");
 	const setActivationToken = useSetRecoilState(activationToken)
 	const setUser = useSetRecoilState(userAtom);
 	const [password, setPassword] = useState("");
@@ -49,8 +51,8 @@ export default function SplitScreen() {
 		setLoading(true);
 		try {
 			const response = await axiosInstance.post(
-				"/auth/signup",
-				JSON.stringify({ name, phoneNumber, email, password, confirmPassword })
+				"/company/signup",
+				JSON.stringify({ companyName, transportationType, contactPerson, email, password, confirmPassword })
 			);
 			// const loggedUser = response.data.loggedInUser;
 			const data = response.data;
@@ -174,9 +176,9 @@ export default function SplitScreen() {
 										<FormControl isRequired my={5}>
 											<Input
 												type="text"
-												onChange={(e) => setName(e.target.value)}
-												placeholder="Full name"
-												value={name}
+												onChange={(e) => setCompanyName(e.target.value)}
+												placeholder="Company name"
+												value={companyName}
 												color={"black"}
 												border={"1px solid black"}
 												required
@@ -188,10 +190,32 @@ export default function SplitScreen() {
 
 								<FormControl isRequired my={5}>
 									<Input
+										type="contactPerson"
+										onChange={(e) => setContactPerson(e.target.value)}
+										value={contactPerson}
+										placeholder="contactPerson Name"
+										border={"1px solid black"}
+										required
+									/>
+								</FormControl>
+                
+								{/* <FormControl isRequired my={5}>
+									<Input
 										type="phoneNumber"
 										onChange={(e) => setPhoneNumber(e.target.value)}
 										value={phoneNumber}
 										placeholder="phoneNumber"
+										border={"1px solid black"}
+										required
+									/>
+								</FormControl> */}
+
+								<FormControl isRequired my={5}>
+									<Input
+										type="transportationType"
+										onChange={(e) => setTransportationType(e.target.value)}
+										value={transportationType}
+										placeholder="transportation Type"
 										border={"1px solid black"}
 										required
 									/>
