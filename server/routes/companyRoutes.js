@@ -5,9 +5,11 @@ const router = express.Router()
 const {
     registerCompany,
     loginCompany,
+    activateCompany
   } = require('../controllers/companyController')
  
   router.post("/signup", registerCompany);
   router.post("/login", loginCompany);
+  router.post("/activate-account", activateCompany);
 
   module.exports = router;
