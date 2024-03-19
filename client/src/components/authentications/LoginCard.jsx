@@ -14,7 +14,13 @@ import {
   Checkbox,
   InputGroup,
   InputRightElement,
+  TabList,
+  Tabs,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/react";
+
 import { ViewIcon, ViewOffIcon, CheckIcon } from "@chakra-ui/icons";
 import { FcGoogle } from "react-icons/fc";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -25,6 +31,8 @@ import { prevPathAtom } from "../../atoms/prevPathAtom";
 import useShowToast from "../../hooks/useShowToast";
 import { useAxiosInstance } from "/api/axios";
 import tokenAtom from "../../atoms/tokenAtom";
+import UserLogin from "./UserLogin";
+import CompanyLogin from "./CompanyLogin";
 
 export default function SplitScreen() {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
@@ -108,110 +116,51 @@ export default function SplitScreen() {
           spacing={4}
           w={{ base: "full", md: "md" }}
           maxW={"md"}
-        // align={"center"}
+          // align={"center"}
         >
-          <Heading >
+          <Heading>
             <Text fontSize={"4xl"}>Sign in</Text>
-            <Text fontSize={"lg"} color={'#969696'}>Please login to continue to your account.</Text>
+            <Text fontSize={"lg"} color={"#969696"}>
+              Please login to continue to your account.
+            </Text>
           </Heading>
 
-          <Stack spacing={4}>
-            <form onSubmit={handleSubmit}>
-              <Box
-                w={{ base: "100%", md: "80%", lg: "100%" }}
-                maxW="500px"
-                mx="auto"
-              >
-                <FormControl
-                  isRequired
-                  w={{ base: "l", md: "400px", lg: "500px" }}
-                  maxW="500px"
-                  mx="auto"
-                  my={5}
-                >
-                  <FormLabel>Email or username</FormLabel>
-                  <Input
-                    type={'text'}
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    placeholder="example@mail.com"
-                    border={"1px solid black"}
-                    required
-                  />
-                </FormControl>
+          <Tabs variant="unstyled">
+            <TabList>
+              <Tab _selected={{ color: "white", bg: "blue.500" }}>
+                Login as a User
+              </Tab>
+              <Tab _selected={{ color: "white", bg: "green.400" }}>
+                Login as Company
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Stack spacing={4}>
+                  <UserLogin />
+                </Stack>{" "}
+              </TabPanel>
+              <TabPanel>
+              <Stack spacing={4}>
+                  <CompanyLogin />
+                </Stack>{" "}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
 
-                <FormControl
-                  isRequired
-                  w={{ base: "l", md: "400px", lg: "500px" }}
-                  maxW="500px"
-                  mx="auto"
-                  my={5}
-                >
-                  <FormLabel>Password</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      onChange={(e) => setPassword(e.target.value)}
-                      value={password}
-                      placeholder="Enter password"
-                      border={"1px solid black"}
-                      required
-                    />
-                    <InputRightElement h={"full"}>
-                      <Button
-                        variant={"ghost"}
-                        onClick={() =>
-                          setShowPassword((showPassword) => !showPassword)
-                        }
-                      >
-                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                </FormControl>
-                <Stack spacing={10}>
-                  <Stack
-                    direction={{ base: 'column', sm: 'row' }}
-                    align={'start'}
-                    justify={'space-between'}>
-                    <Checkbox>Remember me</Checkbox>
-                    <Text color={'blue.400'}><Link href="/forget-password">Forgot password?</Link></Text>
-                  </Stack>
-                  <Button
-                    loadingText="Signing in"
-                    w={{ base: "full", md: "400px", lg: "500px" }}
-                    // size={{ base: "lg", md: "md" }}
-                    bg={"blue.500"}
-                    color={"white"}
-                    _hover={{
-                      bg: "blue.400",
-                    }}
-                    type="submit"
-                    isLoading={loading}
-                    mx="auto"
-                  >
-                    Sign In
-                  </Button>
-                </Stack>
-                <Stack pt={6}>
-                  <Text align={"center"}>
-                    Don&apos;t have an account?{" "}
-                    <Link
-                      color={"blue.400"}
-                      onClick={() => setAuthScreen("signup")}
-                    >
-                      Sign Up
-                    </Link>
-                  </Text>
-                </Stack>
-              </Box>
-            </form>
+          <Stack pt={6}>
+            <Text align={"center"}>
+              Don&apos;t have an account?{" "}
+              <Link color={"blue.400"} onClick={() => setAuthScreen("signp")}>
+                Sign Up
+              </Link>
+            </Text>
           </Stack>
-          <Flex align={'center'} flexDir={'column'} gap={2}>
+          <Flex align={"center"} flexDir={"column"} gap={2}>
             <Flex fontWeight={"3000"} gap={4}>
               <Button
                 // bg={"#3B82F6"}
-                border={'1px solid black'}
+                border={"1px solid black"}
                 _hover={{ bg: "white" }}
                 size={{ base: "sm", md: "md" }}
                 leftIcon={<FcGoogle size={24} />}
@@ -222,12 +171,9 @@ export default function SplitScreen() {
               </Button>
             </Flex>
           </Flex>
-
         </Stack>
-
-
       </Flex>
-      <Flex
+      {/* <Flex
         flexDir={{ base: "column-reverse", md: "column" }}
         w={{ base: "full", md: "40%" }}
       >
@@ -244,7 +190,7 @@ export default function SplitScreen() {
             pos={"absolute"}
             fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
             fontWeight={{ base: "3xl", md: "4xl", lg: "5xl" }}
-            color="#fff"
+            color="#000"
             py={3}
             px={{ base: 4, md: 18 }}
             display={{ base: "none", md: "block" }}
@@ -256,21 +202,20 @@ export default function SplitScreen() {
             >
               Success starts here
             </Text>
-            <Flex gap={1} alignItems={'center'}>
+            <Flex gap={1} alignItems={"center"}>
               <CheckIcon boxSize={4} />
               <Text as={"h2"}>Pay per project, not per hour</Text>
             </Flex>
-            <Flex gap={1} alignItems={'center'}>
+            <Flex gap={1} alignItems={"center"}>
               <CheckIcon boxSize={4} />
-              <Text as={"h2"}>
-                Access to talent and businesses
-              </Text>
+              <Text as={"h2"}>Access to talent and businesses</Text>
             </Flex>
-            <Text as={'h2'} textAlign={'center'}>across the global</Text>
+            <Text as={"h2"} textAlign={"center"}>
+              across the global
+            </Text>
           </Box>
         </Box>
-      </Flex>
-
+      </Flex> */}
     </Stack>
   );
 }

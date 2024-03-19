@@ -73,6 +73,18 @@ const SidebarContent = ({ onClose, ...rest }) => {
 				Dashboard
 			</NavItem>
 
+			<NavItem
+				as={NavLink}
+				to={"/invoice-me"}
+				style={({ isActive }) => ({
+					color: isActive ? "#fff" : "",
+					background: isActive ? "#3B82F6" : "",
+				})}
+				icon={AiFillGift}
+			>
+				Serch for Train/Buss
+			</NavItem>
+
 			<Accordion allowToggle>
 				<AccordionItem>
 					<AccordionButton>
@@ -232,7 +244,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 	const logout = useLogout();
 	const user = useRecoilValue(userAtom);
 	const navigate = useNavigate();
-	
+
 
 	return (
 		<Flex

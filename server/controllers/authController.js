@@ -38,7 +38,7 @@ const signUp = async (req, res) => {
     const user = { name, phoneNumber, email, password: hashedPassword };
 
     const activationToken = createActivationToken(user);
-    const activationCode = activationToken.activationCode;
+    const activationCode = activationToken.activationCode; 
 
     const data = { user: { name: user.name }, activationCode };
 
@@ -220,7 +220,7 @@ const login = async (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "10s" }
+        { expiresIn: "15m" }
       );
       const refreshToken = jwt.sign(
         { email: foundUser.email },

@@ -1,35 +1,47 @@
-const mongoose = require("mongoose");
+// models/Train.js
 
-const TrainSchema = new mongoose.Schema({
-  name: {
-    trim: true,
+const mongoose = require('mongoose');
+
+const trainSchema = new mongoose.Schema({
+  trainName: {
     type: String,
-    unique: true,
+    required: true
   },
-  users: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: false,
-    },
-  ],
-  destination: {
+  trainNumber: {
     type: String,
-    maxlength: 100,
+    required: true,
+    unique: true
   },
-  startpoint: {
+  departureStation: {
     type: String,
-    maxlength: 100,
+    required: true
   },
-  startDate: {
-    type: Date,
+  arrivalStation: {
+    type: String,
+    required: true
   },
-  reachDate: {
-    type: Date,
+  departureTime: {
+    type: String,
+    required: true
   },
-  price: {
+  arrivalTime: {
+    type: String,
+    required: true
+  },
+  duration: {
+    type: String,
+    required: true
+  },
+  ticketPrice: {
     type: Number,
+    required: true
   },
+  availableSeats: {
+    type: Number,
+    required: true
+  }
 });
 
-module.exports = mongoose.model("train", TrainSchema);
+const Train = mongoose.model('Train', trainSchema);
+
+module.exports = Train;

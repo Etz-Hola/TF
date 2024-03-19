@@ -7,6 +7,7 @@ import { mode } from "@chakra-ui/theme-tools";
 import { extendTheme } from "@chakra-ui/theme-utils";
 
 import { RecoilRoot } from "recoil";
+import { ThemeProvider } from "@material-tailwind/react";
 
 const styles = {
 	global: (props) => ({
@@ -33,14 +34,16 @@ const theme = extendTheme({ config, styles, colors });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 
-  <RecoilRoot>
-{/* <React.StrictMode> */}
-		<BrowserRouter>
-			<ChakraProvider theme={theme}>
-				<ColorModeScript initialColorMode={theme.config.initialColorMode} />
-				<App />
-			</ChakraProvider>
-		</BrowserRouter>
-	{/* </React.StrictMode> */}
-  </RecoilRoot>
+	<RecoilRoot>
+		{/* <React.StrictMode> */}
+		<ThemeProvider>
+			<BrowserRouter>
+				<ChakraProvider theme={theme}>
+					<ColorModeScript initialColorMode={theme.config.initialColorMode} />
+					<App />
+				</ChakraProvider>
+			</BrowserRouter>
+		</ThemeProvider>
+		{/* </React.StrictMode> */}
+	</RecoilRoot>
 );

@@ -4,24 +4,24 @@ import tokenAtom from '../atoms/tokenAtom'; // Assuming you define atoms in a se
 
 const useAuth = () => {
   const token = useRecoilValue(tokenAtom);
-  let isClient = false;
+  let isCompany = false;
   let isAdmin = false;
-  let status = 'Freelancer';
+  let status = 'User';
 
   if (token) {
     const decoded = jwtDecode(token);
-    const { username, roles } = decoded.UserInfo;
+    const { email, roles } = decoded.UserInfo;
 
-    isClient = roles.includes('Client');
+    isCompany = roles.includes('Company');
     isAdmin = roles.includes('Admin');
 
-    if (isClient) status = 'Client';
+    if (isCompany) status = 'Company';
     if (isAdmin) status = 'Admin';
 
-    return { username, roles, status, isClient, isAdmin };
+    return { email, roles, status, isCompany, isAdmin };
   }
 
-  return { username: '', roles: [], isClient, isAdmin, status };
+  return { email: '', roles: [], isCompany, isAdmin, status };
 };
 
 export default useAuth;

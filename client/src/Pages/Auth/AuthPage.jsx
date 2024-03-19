@@ -18,9 +18,12 @@ const AuthPage = () => {
 
 	return (
 		<Box as="section" bg={"#fff"}>
-			<> {authScreenState === "login" ? <LoginCard /> : <SignUpCard /> : <CompanyLogin /> : <CompanySignUp />} </>
+			<> {authScreenState === "login" ? <LoginCard /> : <SignUpCard /> 
+			// ? <CompanyLogin /> : <CompanySignUp />
+			} </>
 		</Box> 
 	);
 };
+
 
 export default AuthPage;

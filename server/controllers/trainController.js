@@ -4,16 +4,30 @@ const Train = require('../models/Train');
 
 exports.uploadTrainDetails = async (req, res) => {
   try {
-    // Extract train details from the uploaded file
-    const trainDetails = req.file;
+    // Extract train details from the request body
+    const {
+      trainName,
+      trainNumber,
+      departureStation,
+      arrivalStation,
+      departureTime,
+      arrivalTime,
+      duration,
+      ticketPrice,
+      availableSeats
+    } = req.body;
 
     // Save the train details to the database
     const newTrain = new Train({
-      trainNumber: req.body.trainNumber,
-      route: req.body.route,
-      schedule: req.body.schedule,
-      availableSeats: req.body.availableSeats,
-      detailsFile: trainDetails.path // Save the file path or URL in the database
+      trainName,
+      trainNumber,
+      departureStation,
+      arrivalStation,
+      departureTime,
+      arrivalTime,
+      duration,
+      ticketPrice,
+      availableSeats
     });
     
     await newTrain.save();

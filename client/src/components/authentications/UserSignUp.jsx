@@ -16,7 +16,7 @@ import {
 import { ViewIcon, ViewOffIcon, CheckIcon } from "@chakra-ui/icons";
 // import { FcGoogle } from "react-icons/fc";
 import { useSetRecoilState } from "recoil";
-// import authScreenAtom from "../../atoms/authAtom";
+import authScreenAtom from "../../atoms/authAtom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAxiosInstance } from "../../../api/axios";
@@ -24,16 +24,14 @@ import userAtom from "../../atoms/userAtom";
 import useShowToast from "../../hooks/useShowToast";
 import activationToken from "../../atoms/activationTokenAtom";
 
-export default function CompanySignUp() {
+export default function UserSignUp() {
 	// const setAuthScreen = useSetRecoilState(authScreenAtom);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [email, setEmail] = useState("");
-	const [companyName, setCompanyName] = useState("");
-	// const [phoneNumber, setPhoneNumber] = useState("");
-	const [contactPerson, setContactPerson] = useState("");
-	const [transportationType, setTransportationType] = useState("");
-	// const setActivationToken = useSetRecoilState(activationToken)
+	const [name, setName] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const setActivationToken = useSetRecoilState(activationToken)
 	const setUser = useSetRecoilState(userAtom);
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -51,8 +49,8 @@ export default function CompanySignUp() {
 		setLoading(true);
 		try {
 			const response = await axiosInstance.post(
-				"/company/signup",
-				JSON.stringify({ companyName, transportationType, contactPerson, email, password, confirmPassword })
+				"/auth/signup",
+				JSON.stringify({ name, phoneNumber, email, password, confirmPassword })
 			);
 			// const loggedUser = response.data.loggedInUser;
 			const data = response.data;
@@ -134,8 +132,8 @@ export default function CompanySignUp() {
 				</Box>
 			</Flex>
 			<Flex p={8} flex={1} align={"center"} justify={"center"} 
-			// bg={"blue.300"}
-			>
+            // bg={"blue.300"}
+            >
 				<Stack spacing={4} w={"full"} maxW={"md"}>
 					<Heading>
 						<Text align="center" fontSize={"4xl"}>Create an Acount</Text>
@@ -178,9 +176,9 @@ export default function CompanySignUp() {
 										<FormControl isRequired my={5}>
 											<Input
 												type="text"
-												onChange={(e) => setCompanyName(e.target.value)}
-												placeholder="Company name"
-												value={companyName}
+												onChange={(e) => setName(e.target.value)}
+												placeholder="Full name"
+												value={name}
 												color={"black"}
 												border={"1px solid black"}
 												required
@@ -192,32 +190,10 @@ export default function CompanySignUp() {
 
 								<FormControl isRequired my={5}>
 									<Input
-										type="contactPerson"
-										onChange={(e) => setContactPerson(e.target.value)}
-										value={contactPerson}
-										placeholder="contactPerson Name"
-										border={"1px solid black"}
-										required
-									/>
-								</FormControl>
-                
-								{/* <FormControl isRequired my={5}>
-									<Input
 										type="phoneNumber"
 										onChange={(e) => setPhoneNumber(e.target.value)}
 										value={phoneNumber}
 										placeholder="phoneNumber"
-										border={"1px solid black"}
-										required
-									/>
-								</FormControl> */}
-
-								<FormControl isRequired my={5}>
-									<Input
-										type="transportationType"
-										onChange={(e) => setTransportationType(e.target.value)}
-										value={transportationType}
-										placeholder="transportation Type"
 										border={"1px solid black"}
 										required
 									/>
