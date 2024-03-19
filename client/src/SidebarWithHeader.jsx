@@ -82,109 +82,21 @@ const SidebarContent = ({ onClose, ...rest }) => {
 				})}
 				icon={AiFillGift}
 			>
-				Serch for Train/Buss
+				Upload Train/Bus
 			</NavItem>
 
-			<Accordion allowToggle>
-				<AccordionItem>
-					<AccordionButton>
-						<Flex
-							align="center"
-							p="4"
-							// mx="4"
-							borderRadius="lg"
-							role="group"
-							cursor="pointer"
-						>
-							<Icon mr="4" fontSize="16" as={ImArrowDownLeft2} />
-							Tasks
-						</Flex>
-						<AccordionIcon />
-					</AccordionButton>
-					<AccordionPanel pb={4}>
-						<NavItem
-							as={NavLink}
-							to={"/clients/my-tasks"}
-							style={({ isActive }) => ({
-								color: isActive ? "#fff" : "",
-								background: isActive ? "#3B82F6" : "",
-							})}
-							pl="10"
-							py="2"
-						>
-							My Tasks
-						</NavItem>
-						<NavItem
-							as={NavLink}
-							to={"/tasks/sent"}
-							style={({ isActive }) => ({
-								color: isActive ? "#fff" : "",
-								background: isActive ? "#3B82F6" : "",
-							})}
-							pl="10"
-							py="2"
-						>
-							All Tasks
-						</NavItem>
-						<NavItem
-							as={NavLink}
-							to={"/clients"}
-							style={({ isActive }) => ({
-								color: isActive ? "#fff" : "",
-								background: isActive ? "#3B82F6" : "",
-							})}
-							pl="10"
-							py="2"
-						>
-							Sent proposal
-						</NavItem>
-					</AccordionPanel>
-				</AccordionItem>
-
-				<AccordionItem>
-					<AccordionButton>
-						<Flex
-							align="center"
-							p="4"
-							// mx="4"
-							borderRadius="lg"
-							role="group"
-							cursor="pointer"
-						>
-							<Icon mr="4" fontSize="16" as={ImArrowUpRight2} />
-							Pay
-						</Flex>
-						<AccordionIcon />
-					</AccordionButton>
-					<AccordionPanel pb={4}>
-						<NavItem
-							as={NavLink}
-							to={"/bills"}
-							style={({ isActive }) => ({
-								color: isActive ? "#fff" : "",
-								background: isActive ? "#3B82F6" : "",
-							})}
-							pl="10"
-							py="2"
-						>
-							Bills
-						</NavItem>
-						<NavItem
-							as={NavLink}
-							to={"/payrolls"}
-							style={({ isActive }) => ({
-								color: isActive ? "#fff" : "",
-								background: isActive ? "#3B82F6" : "",
-							})}
-							pl="10"
-							py="2"
-						>
-							Payroll
-						</NavItem>
-					</AccordionPanel>
-				</AccordionItem>
-			</Accordion>
-
+			<NavItem
+				as={NavLink}
+				to={"/invoice-me"}
+				style={({ isActive }) => ({
+					color: isActive ? "#fff" : "",
+					background: isActive ? "#3B82F6" : "",
+				})}
+				icon={AiFillGift}
+			>
+				Serch for Train/Bus
+			</NavItem>
+			
 			<NavItem
 				as={NavLink}
 				to={"/invoice-me"}
@@ -196,17 +108,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 			>
 				InvoiceMe
 			</NavItem>
-			<NavItem
-				as={NavLink}
-				to={"/employees"}
-				style={({ isActive }) => ({
-					color: isActive ? "#fff" : "",
-					background: isActive ? "#3B82F6" : "",
-				})}
-				icon={BsGearFill}
-			>
-				Employees
-			</NavItem>
+			
 		</Box>
 	);
 };

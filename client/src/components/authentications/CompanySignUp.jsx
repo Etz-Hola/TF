@@ -33,7 +33,7 @@ export default function CompanySignUp() {
 	// const [phoneNumber, setPhoneNumber] = useState("");
 	const [contactPerson, setContactPerson] = useState("");
 	const [transportationType, setTransportationType] = useState("");
-	// const setActivationToken = useSetRecoilState(activationToken)
+	const setActivationToken = useSetRecoilState(activationToken)
 	const setUser = useSetRecoilState(userAtom);
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,7 +64,7 @@ export default function CompanySignUp() {
 			setUser(data);
 			setActivationToken(data.activationToken)
 
-			navigate("/activate-verify");
+			navigate("/activateCompany-verify");
 		} catch (error) {
 			console.log(error);
 			

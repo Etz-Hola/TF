@@ -101,7 +101,7 @@ const ActivatePage = () => {
 			<Center py={6}>
 				<Box
 					maxW={{ base: "80%", sm: "25rem", md: "35rem" }}
-					bg={useColorModeValue("white", "gray.800")}
+					bg={useColorModeValue("white", "gray.800")} 
 					boxShadow={"2xl"}
 					rounded={"md"}
 					overflow={"hidden"}

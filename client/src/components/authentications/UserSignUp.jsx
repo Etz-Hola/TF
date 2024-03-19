@@ -62,7 +62,7 @@ export default function UserSignUp() {
 			setUser(data);
 			setActivationToken(data.activationToken)
 
-			navigate("/activate-verify");
+			navigate("/activate-verify"); 
 		} catch (error) {
 			console.log(error);
 			

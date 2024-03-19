@@ -7,6 +7,7 @@ import VerifyEmailForm from './components/authentications/VerifyEmailForm';
 import GoogleAuth from './components/authentications/GoogleAuth';
 import AccountConfirmation from './components/authentications/AccountConfirmation';
 import AccountVerifyEmailForm from './components/authentications/AccountVerifyEmailForm';
+import CompanyAccountVerifyEmailForm from './components/authentications/CompanyAccountVerifyEmailForm';
 import { ROLES } from '../config/roles_list';
 import HomePage from "./Pages/Landing page/HomePage";
 import SignUpCard from "./components/authentications/SignUpCard"
@@ -30,6 +31,7 @@ function App() {
         <Route path="/confirm-email" element={<AccountConfirmation />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/activate-verify" element={<AccountVerifyEmailForm />} />
+        <Route path="/activateCompany-verify" element={<CompanyAccountVerifyEmailForm />} />
         <Route path="/forget-password" element={<ForgetingPwd />} />
         <Route path="/activate-form" element={<VerifyEmailForm />} />
         <Route path="/dashboard" element={<DashboardPage />} />
