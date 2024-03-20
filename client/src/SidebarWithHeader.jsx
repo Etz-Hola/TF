@@ -53,10 +53,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
 			{...rest}
 		>
 			<Flex h="20" alignItems="center" mx="6" justifyContent="space-between">
-				{/* <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-					Logo
-				</Text> */}
-				<Image src="/SidebarLogo.svg" />
+				<Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" >
+					
+				</Text>
+				{/* <Image src="/tflogo.png" /> */}
 
 				<CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
 			</Flex>
@@ -75,7 +75,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 			<NavItem
 				as={NavLink}
-				to={"/invoice-me"}
+				to={"/Uploa"}
 				style={({ isActive }) => ({
 					color: isActive ? "#fff" : "",
 					background: isActive ? "#3B82F6" : "",
@@ -87,7 +87,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 			<NavItem
 				as={NavLink}
-				to={"/invoice-me"}
+				to={"/Serch"}
 				style={({ isActive }) => ({
 					color: isActive ? "#fff" : "",
 					background: isActive ? "#3B82F6" : "",
@@ -170,7 +170,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 				icon={<FiMenu />}
 			/>
 
-			<Image display={{ base: "flex", md: "none" }} src="/QBLogo.png" />
+			<Image display={{ base: "flex", md: "none" }} src="/tflogo.png" />
 
 			<HStack spacing={{ base: "0", md: "6" }}>
 				<IconButton
@@ -208,7 +208,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 							bg={useColorModeValue("white", "gray.900")}
 							borderColor={useColorModeValue("gray.200", "gray.700")}
 						>
-							<MenuItem onClick={() => navigate(`/profile/${user.username}`)}>Profile</MenuItem>
+							<MenuItem onClick={() => navigate(`/profile/${user.name}`)}>Profile</MenuItem>
 							<MenuDivider />
 							<MenuItem onClick={logout}>Sign out</MenuItem>
 						</MenuList>
