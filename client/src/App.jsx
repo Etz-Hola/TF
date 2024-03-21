@@ -18,6 +18,7 @@ import AboutPage from './Pages/AboutPage';
 import DashboardPage from './Pages/Dashboard/DashboardPage';
 import CompanySignUp from './components/authentications/CompanySignUp';
 import CompanyLogin from './components/authentications/CompanyLogin';
+import TrainUpload from './Pages/TrainUpload';
 
 
 
@@ -26,7 +27,7 @@ function App() {
   return (
     <>
       <Routes>
-        
+
         <Route path="/auth/google-verify" element={<GoogleAuth />} />
         <Route path="/confirm-email" element={<AccountConfirmation />} />
         <Route path="/auth" element={<AuthPage />} />
@@ -41,13 +42,15 @@ function App() {
         >
           <Route
             element={<RequireAuth allowedRoles={[...Object.values(ROLES.Admin, ROLES.Client)]} />}>
-               
+
+          </Route>
+          {/* <Route path="/" element={<HomePage />} /> */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path='company'>
+            <Route path="upload" element={<TrainUpload />} />
           </Route>
         </Route>
-        {/* <Route path="/" element={<HomePage />} /> */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-
         <Route path="/signup" element={<SignUpCard />} />
         <Route path="/companysignup" element={<CompanySignUp />} />
         <Route path="/login" element={<LoginCard />} />

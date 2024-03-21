@@ -75,7 +75,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 			<NavItem
 				as={NavLink}
-				to={"/Uploa"}
+				to={"/company/upload"}
 				style={({ isActive }) => ({
 					color: isActive ? "#fff" : "",
 					background: isActive ? "#3B82F6" : "",
