@@ -16,16 +16,24 @@ const transportSchema = new mongoose.Schema({
     enum: ['One Way', 'To and Fro'],
     required: true
   },
-  types: [{
-    type: {
-      type: String,
-      required: true
-    },
-    price: {
-      type: Number,
-      required: true
-    }
-  }],
+  // types: [{
+  //   type: {
+  //     type: String,
+  //     required: true
+  //   },
+  //   price: {
+  //     type: Number,
+  //     required: true
+  //   }
+  // }],
+  firstclassPrice: {
+    type: String,
+    required: true
+  },
+  StanderdPrice: {
+    type: String,
+    required: true
+  },
   arrivalStation: {
     type: String,
     required: true
@@ -42,10 +50,10 @@ const transportSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  ticketPrice: {
-    type: Number,
-    required: true
-  },
+  // ticketPrice: {
+  //   type: Number,
+  //   required: true
+  // },
   availableSeats: {
     type: Number,
     required: true

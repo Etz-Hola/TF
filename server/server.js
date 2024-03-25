@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
 const companyRoutes = require("./routes/companyRoutes");
 const refreshRoute = require("./routes/refresh");
+const trainTransportRoutes = require("./routes/trainTransportRoutes");
 require("./config/passport-setup");
 
 dotenv.config();
@@ -55,6 +56,7 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/refresh", refreshRoute);
 app.use("/company", companyRoutes);
+app.use("/trains", trainTransportRoutes);
 
 mongoose
 	.connect(process.env.MONGO_URI)

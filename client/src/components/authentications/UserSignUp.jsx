@@ -181,7 +181,7 @@ export default function UserSignUp() {
 												value={name}
 												color={"black"}
 												border={"1px solid black"}
-												required
+												required 
 												w={"500px"}
 											/>
 										</FormControl>

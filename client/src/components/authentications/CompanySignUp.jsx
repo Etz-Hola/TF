@@ -24,6 +24,8 @@ import userAtom from "../../atoms/userAtom";
 import useShowToast from "../../hooks/useShowToast";
 import activationToken from "../../atoms/activationTokenAtom";
 
+
+
 export default function CompanySignUp() {
 	// const setAuthScreen = useSetRecoilState(authScreenAtom);
 	const [showPassword, setShowPassword] = useState(false);

@@ -18,7 +18,8 @@ import AboutPage from './Pages/AboutPage';
 import DashboardPage from './Pages/Dashboard/DashboardPage';
 import CompanySignUp from './components/authentications/CompanySignUp';
 import CompanyLogin from './components/authentications/CompanyLogin';
-import TrainUpload from './Pages/TrainUpload';
+import TrainUpload from './Pages/Train/components/TrainUpload';
+import CompanyProfile from './Pages/Train/pages/CompanyProfile';
 
 
 
@@ -47,8 +48,10 @@ function App() {
           {/* <Route path="/" element={<HomePage />} /> */}
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/data" element={<CompanyProfile />} />
           <Route path='company'>
             <Route path="upload" element={<TrainUpload />} />
+            
           </Route>
         </Route>
         <Route path="/signup" element={<SignUpCard />} />
