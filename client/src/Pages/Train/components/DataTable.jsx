@@ -1,6 +1,24 @@
 import React from "react";
 
-const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
+const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
+  const handleInputChange = (index, field, value) => {
+    const newData = [...data];
+    newData[index][field] = value;
+    setTrainData(newData);
+  };
+
+  const handleEdit = (index) => {
+    onEdit(index);
+  };
+
+  const handleSave = (index) => {
+    onSave(index);
+  };
+
+  const handleDelete = (index) => {
+    onDelete(index);
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="table-auto min-w-full divide-y divide-gray-200">
@@ -45,6 +63,9 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Edit
             </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Delete
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -55,11 +76,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
                   <input
                     type="text"
                     value={item.trainId}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].trainId = e.target.value;
-                      setTrainData(newData);
-                    }}
+                    onChange={(e) => handleInputChange(index, "trainId", e.target.value)}
                   />
                 ) : (
                   item.trainId
@@ -70,11 +87,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
                   <input
                     type="text"
                     value={item.nameOrNumber}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].nameOrNumber = e.target.value;
-                      setTrainData(newData);
-                    }}
+                    onChange={(e) => handleInputChange(index, "nameOrNumber", e.target.value)}
                   />
                 ) : (
                   item.nameOrNumber
@@ -85,11 +98,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
                   <input
                     type="text"
                     value={item.departureStation}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].departureStation = e.target.value;
-                      setTrainData(newData);
-                    }}
+                    onChange={(e) => handleInputChange(index, "departureStation", e.target.value)}
                   />
                 ) : (
                   item.departureStation
@@ -100,11 +109,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
                   <input
                     type="text"
                     value={item.ways}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].ways = e.target.value;
-                      setTrainData(newData);
-                    }}
+                    onChange={(e) => handleInputChange(index, "ways", e.target.value)}
                   />
                 ) : (
                   item.ways
@@ -115,11 +120,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
                   <input
                     type="text"
                     value={item.types}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].types = e.target.value;
-                      setTrainData(newData);
-                    }}
+                    onChange={(e) => handleInputChange(index, "types", e.target.value)}
                   />
                 ) : (
                   item.types
@@ -130,11 +131,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
                   <input
                     type="text"
                     value={item.arrivalStation}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].arrivalStation = e.target.value;
-                      setTrainData(newData);
-                    }}
+                    onChange={(e) => handleInputChange(index, "arrivalStation", e.target.value)}
                   />
                 ) : (
                   item.arrivalStation
@@ -143,111 +140,89 @@ const DataTable = ({ data, onEdit, onSave, setTrainData }) => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.editable ? (
                   <input
-                    type="text"
-                    value={item.duration}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].duration = e.target.value;
-                      setTrainData(newData);
-                    }}
-                  />
-                ) : (
-                  item.duration
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.editable ? (
-                  <input
-                    type="text"
-                    value={item.firstclassPrice}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].firstclassPrice = e.target.value;
-                      setTrainData(newData);
-                    }}
-                  />
-                ) : (
-                  item.firstclassPrice
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.editable ? (
-                  <input
-                    type="text"
-                    value={item.standardPrice}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].standardPrice = e.target.value;
-                      setTrainData(newData);
-                    }}
-                  />
-                ) : (
-                  item.standardPrice
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.editable ? (
-                  <input
-                    type="text"
-                    value={item.availableSeats}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].availableSeats = e.target.value;
-                      setTrainData(newData);
-                    }}
-                  />
-                ) : (
-                  item.availableSeats
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.editable ? (
-                  <input
-                    type="text"
-                    value={item.returnTimeFromArrivalStation}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].returnTimeFromArrivalStation =
-                        e.target.value;
-                      setTrainData(newData);
-                    }}
-                  />
-                ) : (
-                  item.returnTimeFromArrivalStation
-                )}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.editable ? (
-                  <input
-                    type="text"
-                    value={item.arrivalTimeDepartureStation}
-                    onChange={(e) => {
-                      const newData = [...data];
-                      newData[index].arrivalTimeDepartureStation =
-                        e.target.value;
-                      setTrainData(newData);
-                    }}
-                  />
-                ) : (
-                  item.arrivalTimeDepartureStation
-                )}
-              </td>
-              <td>
-                {item.editable ? (
-                  <>
-                    <button onClick={() => onSave(index)}>Save</button>
-                    <button onClick={() => onEdit(index)}>Cancel</button>
-                  </>
-                ) : (
-                  <button onClick={() => onEdit(index)}>Edit</button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+                  type="text"
+                  value={item.duration}
+                  onChange={(e) => handleInputChange(index, "duration", e.target.value)}
+                />
+              ) : (
+                item.duration
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {item.editable ? (
+                <input
+                  type="text"
+                  value={item.firstclassPrice}
+                  onChange={(e) => handleInputChange(index, "firstclassPrice", e.target.value)}
+                />
+              ) : (
+                item.firstclassPrice
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {item.editable ? (
+                <input
+                  type="text"
+                  value={item.standardPrice}
+                  onChange={(e) => handleInputChange(index, "standardPrice", e.target.value)}
+                />
+              ) : (
+                item.standardPrice
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {item.editable ? (
+                <input
+                  type="text"
+                  value={item.availableSeats}
+                  onChange={(e) => handleInputChange(index, "availableSeats", e.target.value)}
+                />
+              ) : (
+                item.availableSeats
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {item.editable ? (
+                <input
+                  type="text"
+                  value={item.returnTimeFromArrivalStation}
+                  onChange={(e) => handleInputChange(index, "returnTimeFromArrivalStation", e.target.value)}
+                />
+              ) : (
+                item.returnTimeFromArrivalStation
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {item.editable ? (
+                <input
+                  type="text"
+                  value={item.arrivalTimeDepartureStation}
+                  onChange={(e) => handleInputChange(index, "arrivalTimeDepartureStation", e.target.value)}
+                />
+              ) : (
+                item.arrivalTimeDepartureStation
+              )}
+            </td>
+            <td>
+              {item.editable ? (
+                <>
+                  <button onClick={() => handleSave(index)}>Save</button>
+                  <button onClick={() => handleEdit(index)}>Cancel</button>
+                </>
+              ) : (
+                <button onClick={() => handleEdit(index)}>Edit</button>
+              )}
+            </td>
+            <td>
+              <button onClick={() => handleDelete(index)}>Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 };
 
 export default DataTable;
+
