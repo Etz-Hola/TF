@@ -7,14 +7,14 @@ const TrainListPage = () => {
   const axiosInstance = useAxiosInstance(); // Initialize Axios instance
 
   useEffect(() => {
-    fetchTrainData(); // Fetch data when the component mounts
+    fetchTrainData();
   }, []);
 
   const fetchTrainData = async () => {
     try {
       const response = await axiosInstance.get('/trains/all-trains/get'); // Adjust the API endpoint
-      console.log(response)
-      if (!response.ok) {
+      console.log(response);
+      if (response.status !== 200) { // Check for status code
         throw new Error('Failed to fetch data');
       }
       const data = response.data; // Access data from the response
