@@ -22,7 +22,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
   return (
     <div className="overflow-x-auto">
       <table className="table-auto min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 mw-[6]">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Train ID
@@ -163,7 +163,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
               {item.editable ? (
                 <input
                   type="text"
-                  value={item.standardPrice}
+                  value={item.StanderdPrice}
                   onChange={(e) => handleInputChange(index, "standardPrice", e.target.value)}
                 />
               ) : (
