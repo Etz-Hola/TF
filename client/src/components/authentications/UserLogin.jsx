@@ -57,7 +57,7 @@ export default function UserLogin() {
             const loggedUser = response.data;
             const token = response.data.accessToken;
 
-            localStorage.setItem("user-workiq", JSON.stringify(loggedUser));
+            localStorage.setItem("ticket-flow", JSON.stringify(loggedUser));
             localStorage.setItem("token", token);
 
             setToken(token);

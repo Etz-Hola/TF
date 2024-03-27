@@ -22,7 +22,11 @@ const uploadTrainDetails = async (req, res) => {
       arrivalTimeDepartureStation,
     } = req.body;
 
-    // Save the transport details to the database
+    // company ID is available in the request
+    const companyId = req.companyId; // You need to adjust this according to how company ID is passed in your request
+
+
+    // Save the transport details to the database along with the company ID
     const newTransport = new Transport({
       nameOrNumber,
       departureStation,
@@ -37,6 +41,7 @@ const uploadTrainDetails = async (req, res) => {
       availableSeats,
       returnTimeFromArrivalStation,
       arrivalTimeDepartureStation,
+      company: companyId, // Associate the train with the company's ID
     });
 
     await newTransport.save();
@@ -82,8 +87,23 @@ const getAllTrainDetails = async (req, res) => {
   }
 };
 
+// Controller to fetch all trains uploaded by a specific company
+const getUploadedTrainsByCompanyId = async (req, res) => {
+  try {
+    const companyId = req.params.companyId; // Extract the company ID from the request parameters
+    const trains = await Transport.find({ company: companyId }); // Fetch trains by company ID
+
+    // Send the fetched trains as a response
+    res.json(trains);
+  } catch (error) {
+    console.error("Error getting trains by company ID:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   uploadTrainDetails,
   getUploadedTrainDetailsById,
   getAllTrainDetails,
+  getUploadedTrainsByCompanyId,
 };

@@ -87,7 +87,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 			<NavItem
 				as={NavLink}
-				to={"/Serch"}
+				to={"/search/Train"}
 				style={({ isActive }) => ({
 					color: isActive ? "#fff" : "",
 					background: isActive ? "#3B82F6" : "",
@@ -144,10 +144,11 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
 	const logout = useLogout();
-	const user = useRecoilValue(userAtom);
+	const user = JSON.parse(localStorage.getItem('ticket-flow'))
+	console.log(user)
 	const navigate = useNavigate();
 
-
+console.log(user)
 	return (
 		<Flex
 			pos={"sticky"}
@@ -196,7 +197,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
 									ml="2"
 								>
 									<Text fontSize="sm" color="gray.600">
-										{user?.name}
+										{user?.roles?.includes('Company')? user?.result?.companyName: user?.result?.name}
+										{/* olayemi adeke */}
 									</Text>
 								</VStack>
 								<Box display={{ base: "none", md: "flex" }}>
@@ -208,7 +210,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 							bg={useColorModeValue("white", "gray.900")}
 							borderColor={useColorModeValue("gray.200", "gray.700")}
 						>
-							<MenuItem onClick={() => navigate(`/profile/${user.name}`)}>Profile</MenuItem>
+							<MenuItem onClick={() => navigate(`/profile/:${user.result._id}`)}>Profile</MenuItem>
 							<MenuDivider />
 							<MenuItem onClick={logout}>Sign out</MenuItem>
 						</MenuList>

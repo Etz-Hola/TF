@@ -10,6 +10,7 @@ import AccountVerifyEmailForm from './components/authentications/AccountVerifyEm
 import CompanyAccountVerifyEmailForm from './components/authentications/CompanyAccountVerifyEmailForm';
 import { ROLES } from '../config/roles_list';
 import HomePage from "./Pages/Landing page/HomePage";
+import ProfilePage from "./Pages/Profile/ProfilePage";
 import SignUpCard from "./components/authentications/SignUpCard"
 import LoginCard from "./components/authentications/LoginCard"
 import RequireAuth from './Pages/Auth/features/RequireAuth';
@@ -20,6 +21,7 @@ import CompanySignUp from './components/authentications/CompanySignUp';
 import CompanyLogin from './components/authentications/CompanyLogin';
 import TrainUpload from './Pages/Train/components/TrainUpload';
 import CompanyProfile from './Pages/Train/pages/CompanyProfile';
+import SearchTrainPage from './Pages/Search train/Pages/SearchTrainPage';
 
 
 
@@ -47,8 +49,10 @@ function App() {
           </Route>
           {/* <Route path="/" element={<HomePage />} /> */}
           <Route path="/" element={<HomePage />} />
+          <Route path="profile/:userId" element={<ProfilePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/data" element={<CompanyProfile />} />
+          <Route path="/search/Train" element={<SearchTrainPage />} />
           <Route path='company'>
             <Route path="upload" element={<TrainUpload />} />
             

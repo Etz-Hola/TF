@@ -58,8 +58,9 @@ export default function SplitScreen() {
       console.log(response.data);
       const loggedUser = response.data;
       const token = response.data.accessToken;
+      console.log(loggedUser)
 
-      localStorage.setItem("user-workiq", JSON.stringify(loggedUser));
+      localStorage.setItem("ticket-flow", JSON.stringify(loggedUser));
       localStorage.setItem("token", token);
 
       setToken(token);

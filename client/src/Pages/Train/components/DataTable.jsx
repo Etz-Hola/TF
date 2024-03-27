@@ -79,7 +79,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
                     onChange={(e) => handleInputChange(index, "trainId", e.target.value)}
                   />
                 ) : (
-                  item.trainId
+                  item._id
                 )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -123,7 +123,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
                     onChange={(e) => handleInputChange(index, "types", e.target.value)}
                   />
                 ) : (
-                  item.types
+                  item.ways
                 )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

@@ -8,7 +8,7 @@ const DashboardPage = () => {
   return (
     <SidebarWithHeader>
       <Dashboard />
-      <TrainListPage />
+      
 
       
     </SidebarWithHeader>

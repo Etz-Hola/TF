@@ -52,13 +52,16 @@ const TrainUpload = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // console.log(transportDetails)
+     // Assuming you have the company ID stored in localStorage or state
+     const companyId = localStorage.getItem('companyId'); // Adjust this according to how you store the company ID
+
+    
     //Submit logic
     try {
       //Your submit logit here
       const res = await axiosInstance.post(
         "/company/upload-train",
-        JSON.stringify(transportDetails)
+        JSON.stringify(transportDetails,companyId )
       );
       const data = res.data;
       console.log(data);

@@ -63,7 +63,9 @@ const transportSchema = new mongoose.Schema({
   },
   arrivalTimeDepartureStation: {
     type: String
-  }
+  },
+
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true }
 });
 
 const Transport = mongoose.model('Transport', transportSchema);

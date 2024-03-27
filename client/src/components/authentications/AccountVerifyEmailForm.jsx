@@ -31,7 +31,7 @@ const AccountVerifyEmailForm = () => {
         JSON.stringify({ activation_code: code, activation_token: activationToken })
       );
       const { user } = response.data;
-      await localStorage.setItem("user-workiq", JSON.stringify(user));
+      await localStorage.setItem("ticket-flow", JSON.stringify(user));
 
       console.log(response.data);
       if (response.status === 201) {

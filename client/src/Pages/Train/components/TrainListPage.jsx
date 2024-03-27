@@ -30,6 +30,19 @@ const TrainListPage = () => {
       console.error('Error fetching train data:', error);  
     }
   };
+  const fetchTrainById = async () => {
+    try {
+      const response = await axiosInstance.get('/trains/id');
+      console.log(response);
+      if (response.status !== 200) { // Check for status code
+        throw new Error('Failed to fetch data');
+      }
+      const data = response.data; // Access data from the response
+      setTrainData(data);
+    } catch (error) {
+      console.error('Error fetching train data:', error);  
+    }
+  };
 
   const handleEdit = (index) => {
     

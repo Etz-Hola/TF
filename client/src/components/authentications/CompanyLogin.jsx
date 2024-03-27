@@ -51,7 +51,7 @@ export default function CompanyLogin() {
       const loggedUser = response.data;
       const token = response.data.accessToken;
 
-      localStorage.setItem("user-workiq", JSON.stringify(loggedUser));
+      localStorage.setItem("ticket-flow", JSON.stringify(loggedUser));
       localStorage.setItem("token", token);
 
       setToken(token);
@@ -59,7 +59,7 @@ export default function CompanyLogin() {
 
       const localStoragePrevPath = localStorage?.getItem("localPrevPath");
       // Redirect to the originally requested route (or a default route)
-      if (localStoragePrevPath) {
+      if (localStoragePrevPath) { 
         localStorage.removeItem("localPrevPath");
         navigate(localStoragePrevPath);
       } else if (prevPath) {
