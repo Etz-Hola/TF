@@ -4,8 +4,10 @@ import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast h
 
 const SearchTrain = () => {
   const [departureStation, setDepartureStation] = useState('');
-  const [arrivalStation, setArrivalStation] = useState('');
+  const [departureStations, setDepartureStations] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
+  const [arrivalStation, setArrivalStation] = useState('');
+  const [arrivalStations, setArrivalStations] = useState([]);
   const [stations, setStations] = useState([]); // State to hold the list of stations
   const [searchResults, setSearchResults] = useState([]); // State to hold the search results
   const axiosInstance = useAxiosInstance(); // Initialize Axios instance
@@ -17,11 +19,15 @@ const SearchTrain = () => {
   }, []);
 
   useEffect(() => {
-    if (departureStation){
+    if (departureStation) {
       const filtered = stations.arrivalStations.filter(el => el.toLowerCase() !== departureStation.toLowerCase())
-      setStations((prev) => { return { ...prev, arrivalStations: filtered } })
+      setArrivalStations(filtered)
     } 
-  }, [departureStation])
+    //   const filtered = stations.departureStations.filter(el => el.toLowerCase() !== arrivalStation.toLowerCase())
+    // else if (arrivalStation) {
+    //   setDepartureStations(filtered)
+    // }
+  }, [departureStation, arrivalStation])
 
 
   // Function to fetch the list of stations from the backend
@@ -33,6 +39,8 @@ const SearchTrain = () => {
       console.log(response.data)
       // const stationsList = stationsData.map(station => station.name);
       setStations(stationsData); // Set the list of stations in the state
+      setArrivalStations(stationsData.arrivalStations)
+      setDepartureStations(stationsData.departureStations)
     } catch (error) {
       console.error('Error fetching stations:', error);
       // If there's an error fetching stations, set stations to an empty array or handle it as appropriate
@@ -85,7 +93,7 @@ const SearchTrain = () => {
           >
             {/* <option value="">Departure Station</option> */}
             {/* Map through the stations array to dynamically populate options */}
-            {stations?.departureStations?.map((departureStation, index) => (
+            {departureStations?.map((departureStation, index) => (
               <option key={index} value={departureStation}>{departureStation}</option>
             ))}
           </select>
@@ -99,7 +107,7 @@ const SearchTrain = () => {
             onChange={(e) => setArrivalStation(e.target.value)}
           >
             {/* <option value="">Arrival Station</option> */}
-            {stations?.arrivalStations?.map((arrivalStation, index) => (
+            {arrivalStations?.map((arrivalStation, index) => (
               <option key={index} value={arrivalStation}>{arrivalStation}</option>
             ))}
           </select>
