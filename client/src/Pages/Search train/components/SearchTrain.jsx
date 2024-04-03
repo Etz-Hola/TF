@@ -14,7 +14,7 @@ const SearchTrain = () => {
   // Fetch the list of stations when the component mounts
   useEffect(() => {
     fetchStations();
-  }, [ ]);
+  }, []);
 
   useEffect(() => {
     if (departureStation){
