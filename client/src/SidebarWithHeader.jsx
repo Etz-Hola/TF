@@ -145,7 +145,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 const MobileNav = ({ onOpen, ...rest }) => {
 	const logout = useLogout();
 	const user = JSON.parse(localStorage.getItem('ticket-flow'))
-	console.log(user)
+	// console.log(user)
 	const navigate = useNavigate();
 
 console.log(user)
@@ -210,7 +210,7 @@ console.log(user)
 							bg={useColorModeValue("white", "gray.900")}
 							borderColor={useColorModeValue("gray.200", "gray.700")}
 						>
-							<MenuItem onClick={() => navigate(`/profile/:${user.result._id}`)}>Profile</MenuItem>
+							<MenuItem onClick={() => navigate(`/profile/${user.result._id}`)}>Profile</MenuItem>
 							<MenuDivider />
 							<MenuItem onClick={logout}>Sign out</MenuItem>
 						</MenuList>

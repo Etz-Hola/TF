@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
   const handleInputChange = (index, field, value) => {
     const newData = [...data];
@@ -19,7 +20,12 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
     onDelete(index);
   };
 
+  
+
+ 
+
   return (
+    
     <div className="overflow-x-auto">
       <table className="table-auto min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50 mw-[6]">
@@ -169,7 +175,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
               ) : (
                 item.standardPrice
               )}
-            </td>
+            </td> 
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               {item.editable ? (
                 <input

@@ -1,373 +1,127 @@
-import React from "react";
-import { FaPlaneArrival, FaPlaneDeparture, FaChild } from "react-icons/fa";
-import { GiPerson } from "react-icons/gi";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from 'react';
+import { useAxiosInstance } from '/api/axios'; // Import Axios instance
+import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast hook
 
 const SearchTrain = () => {
-  // handle event
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const [departureStation, setDepartureStation] = useState('');
+  const [arrivalStation, setArrivalStation] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [stations, setStations] = useState([]); // State to hold the list of stations
+  const [searchResults, setSearchResults] = useState([]); // State to hold the search results
+  const axiosInstance = useAxiosInstance(); // Initialize Axios instance
+  const showToast = useShowToast(); // Initialize useShowToast hook
 
-  // handle submit
-  const onSubmit = (data) => alert(JSON.stringify(data));
+  // Fetch the list of stations when the component mounts
+  useEffect(() => {
+    fetchStations();
+  }, []);
+
+  // Function to fetch the list of stations from the backend
+  const fetchStations = async () => {
+    try {
+      const response = await axiosInstance.get('/trains/get/search/station'); // Adjust the endpoint according to your backend API
+      // Extract the list of stations from the response
+      const stationsData = response.data;
+      const stationsList = stationsData.map(station => station.name);
+      setStations(stationsList); // Set the list of stations in the state
+    } catch (error) {
+      console.error('Error fetching stations:', error);
+      // If there's an error fetching stations, set stations to an empty array or handle it as appropriate
+      setStations([]);
+      // Show a toast with the error message
+      showToast('Error fetching stations. Please try again later.', 'error');
+    }
+  };
+
+  
+
+  const handleSearch = async () => {
+    try {
+      // Send a GET request to the backend API with query parameters
+      const response = await axiosInstance.get('/trains/get/search/station', {
+        params: {
+          departureStation: departureStation,
+          arrivalStation: arrivalStation,
+          selectedDate: selectedDate,
+        },
+      });
+
+      // Update the search results state with the response data
+      setSearchResults(response.data);
+
+    } catch (error) {
+      console.error('Error searching for trains:', error);
+      // Show a toast with the error message
+      showToast('Error searching for trains. Please try again later.', 'error');
+    }
+  };
+
   return (
-    <React.Fragment> 
-      <section>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="bg-white w-auto h-auto pb-10 mt-5 mx-5 px-5 rounded-lg sm:w-full md:w-4/5 md:mx-auto lg:w-2/5 lg:mx-auto">
-            {/* header section */}
-            <div className="h-24 flex justify-center items-center shadow ">
-              <p className="uppercase font-bold text-4xl text-center">
-                Book Your Train
-              </p>
-            </div>
-
-            {/* body section */}
-            <div>
-              <div className="grid justify-center space-y-5 bg-indigo-50  pb-10">
-                <div>
-                  <div className="flex space-x-8 mt-5">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        className={`w-6 h-6 ${
-                          errors.tripType &&
-                          " focus:border-red-500 focus:ring-red-500 border-red-500"
-                        }`}
-                        value="round trip"
-                        {...register("tripType", {
-                          required: {
-                            value: true,
-                            message: "Trip type is required",
-                          },
-                        })}
-                      />
-                      <p className="text-xl font-bold uppercase">Round trip</p>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        className={`w-6 h-6 ${
-                          errors.tripType &&
-                          " focus:border-red-500 focus:ring-red-500 border-red-500"
-                        }`}
-                        value="one way"
-                        {...register("tripType", {
-                          required: {
-                            value: true,
-                            message: "Trip type is required",
-                          },
-                        })}
-                      />
-                      <p className="text-xl font-bold uppercase">one way</p>
-                    </div>
-
-                    {/* <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        className={`w-6 h-6 ${
-                          errors.tripType &&
-                          " focus:border-red-500 focus:ring-red-500 border-red-500"
-                        }`}
-                        value="multy-city"
-                        {...register("tripType", {
-                          required: {
-                            value: true,
-                            message: "Trip type is required",
-                          },
-                        })}
-                      />
-                      <p className="text-xl font-bold uppercase">multy-city</p>
-                    </div> */}
-                  </div>
-                  <div>
-                    {errors.tripType && (
-                      <span className="text-sm text-red-500">
-                        {errors.tripType.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* departure section */}
-                <div>
-                  <div>
-                    <div className="relative">
-                      <p className="font-bold text-xl uppercase">Train from</p>
-                      <select
-                        className={`w-full h-16 text-2xl pl-20 rounded-lg ${
-                          errors.departure &&
-                          " focus:border-red-500 focus:ring-red-500 border-red-500"
-                        }`}
-                        {...register("departure", {
-                          required: {
-                            value: true,
-                            message: "Departure is required",
-                          },
-                        })}
-                      >
-                        <option value="" selected disabled hidden>
-                          --Select Train From--
-                        </option>
-                        <option value="ENIA">
-                          {" "}
-                          Railway stations in Algeria
-                        </option>
-                        <option value="INIA">
-                          {" "}
-                          Railway stations in Angola
-                        </option>
-                        <option value="MMA">  Railway stations in Lagos</option>
-                        <option value="KMA">  Railway stations in Cameroon</option>
-                      </select>
-                      {/* <FaPlaneDeparture className="text-4xl absolute left-5 top-10 " /> */}
-                    </div>
-                    <div>
-                      {errors.departure && (
-                        <span className="text-sm text-red-500">
-                          {errors.departure.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* arrival section */}
-                <div>
-                  <div>
-                    <div className="relative">
-                      <p className="font-bold text-xl uppercase">Train to</p>
-                      <select 
-                      className={`w-full h-16 text-2xl pl-20 rounded-lg ${
-                        errors.arrival &&
-                        " focus:border-red-500 focus:ring-red-500 border-red-500"
-                      }`}
-                      {...register("arrival", {
-                        required: {
-                          value: true,
-                          message: "Arrival is required",
-                        },
-                      })}
-                      >
-                        <option value="" selected disabled hidden>
-                          --Select Train--
-                        </option>
-                        <option value="ENIA">
-                          {" "}
-                          Railway stations in Djibouti
-                        </option>
-                        <option value="INIA">
-                          {" "}
-                          Railway stations in Eritrea
-                        </option>
-                        <option value="MMA"> Railway stations in Gabon</option>
-                        <option value="KMA">  Railway stations in Kenya</option>
-                      </select>
-                      {/* <FaPlaneArrival className="text-4xl absolute left-5 top-10 " /> */}
-                    </div>
-                    <div>
-                    {errors.arrival && (
-                        <span className="text-sm text-red-500">
-                          {errors.arrival.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* date section */}
-                <div className="flex space-x-2">
-                  {/* departure section */}
-                  <div>
-                    <div>
-                      <div className="relative">
-                        <p className="font-bold text-xl uppercase">
-                          departure date
-                        </p>
-                        <input
-                          type="date"
-                          className={`w-full h-16 text-2xl rounded-lg ${errors.departureDate &&
-                            " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
-                          {...register("departureDate", {
-                            required: {
-                              value: true,
-                              message: "Departure date is required",
-                            },
-                          })}
-                        />
-                      </div>
-                      <div>
-                      {errors.departureDate && (
-                        <span className="text-sm text-red-500">
-                          {errors.departureDate.message}
-                        </span>
-                      )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* return section */}
-                  <div>
-                    <div>
-                      <div className="relative">
-                        <p className="font-bold text-xl uppercase">
-                          return date
-                        </p>
-                        <input
-                          type="date"
-                          className={`w-full h-16 text-2xl rounded-lg ${errors.returnDate &&
-                            " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
-                          {...register("returnDate", {
-                            required: {
-                              value: true,
-                              message: "Return date is required",
-                            },
-                          })}
-                        />
-                      </div>
-                      <div>
-                      {errors.returnDate && (
-                        <span className="text-sm text-red-500">
-                          {errors.returnDate.message}
-                        </span>
-                      )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* passenger section */}
-                <div className="flex space-x-2">
-                  {/* adult section */}
-                  <div className="w-full">
-                    <div>
-                      <div className="relative">
-                        <p className="font-bold text-xl uppercase">
-                          {" "}
-                          adults (18+)
-                        </p>
-                        <select 
-                        className="w-full h-16 rounded-lg text-2xl pl-20"
-                        {...register("adult", {
-                            required: {
-                              value: true,
-                              message: "Trip type is required",
-                            },
-                          })}
-                        >
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>
-                        <GiPerson className="text-4xl absolute left-5 top-10 " />
-                      </div>
-                      {/* <div>Error</div> */}
-                    </div>
-                  </div>
-
-                  {/* children section */}
-                  <div className="w-full">
-                    <div>
-                      <div className="relative">
-                        <p className="font-bold text-xl uppercase">
-                          {" "}
-                          children (0-17)
-                        </p>
-                        <select 
-                        className="w-full h-16 rounded-lg text-2xl pl-20"
-                        {...register("children", {
-                            required: {
-                              value: true,
-                              message: "Trip type is required",
-                            },
-                          })}
-                        >
-                          <option>0</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>
-                        <FaChild className="text-4xl absolute left-5 top-10 " />
-                      </div>
-                      {/* <div>Error</div> */}
-                    </div>
-                  </div>
-                </div>
-
-                {/* class and price section */}
-                <div className="flex space-x-2">
-                  {/* class section */}
-                  <div className="w-full">
-                    <div>
-                      <div>
-                        <p className="font-bold text-xl uppercase"> class</p>
-                        <select
-                         className="w-full h-16 rounded-lg text-2xl pl-20"
-                         {...register("class", {
-                            required: {
-                              value: true,
-                              message: "Trip type is required",
-                            },
-                          })}
-                         >
-                          <option>1st Class</option>
-                          <option>Standard</option>
-                        </select>
-                      </div>
-                      {/* <div>Error</div> */}
-                    </div>
-                  </div>
-
-                  {/* price section */}
-                  <div className="w-full">
-                    <div>
-                      <div>
-                        <p className="font-bold text-xl uppercase"> price</p>
-                        <select
-                         className="w-full h-16 rounded-lg text-2xl pl-20"
-                         {...register("price", {
-                            required: {
-                              value: true,
-                              message: "Trip type is required",
-                            },
-                          })}
-                         >
-                          <option>All Prices</option>
-                          <option>$ 1000</option>
-                          <option>$ 2000</option>
-                          <option>$ 3000</option>
-                          <option>$ 4000</option>
-                          <option>$ 5000</option>
-                        </select>
-                      </div>
-                      {/* <div>Error</div> */}
-                    </div>
-                  </div>
-                </div>
-
-                {/* btn section */}
-                <div>
-                  <input
-                    type="submit"
-                    value="Search Train"
-                    className="w-full h-16 font-bold text-3xl uppercase rounded-lg bg-green-100 hover:bg-white"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </section>
-    </React.Fragment>
+    <div className="container mx-auto mt-8">
+      <div className="h-24 flex justify-center items-center shadow">
+        <p className="uppercase font-bold text-4xl text-center">
+          Search Available Trains
+        </p>
+      </div>
+      <div className="flex items-center justify-center">
+        <div className="w-1/3">
+          {/* Departure station dropdown */}
+          <select
+            className="block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+            value={departureStation}
+            onChange={(e) => setDepartureStation(e.target.value)}
+          >
+            <option value="">Departure Station</option>
+            {/* Map through the stations array to dynamically populate options */}
+            {stations.map((station, index) => (
+              <option key={index} value={station}>{station}</option>
+            ))}
+          </select>
+        </div>
+        <div className="mx-4"></div>
+        <div className="w-1/3">
+          {/* Arrival station dropdown */}
+          <select
+            className="block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+            value={arrivalStation}
+            onChange={(e) => setArrivalStation(e.target.value)}
+          >
+            <option value="">Arrival Station</option>
+            {stations.map((station, index) => (
+              <option key={index} value={station}>{station}</option>
+            ))}
+          </select>
+        </div>
+        <div className="mx-4"></div>
+        <div className="w-1/3">
+          {/* Date input */}
+          <input
+            type="date"
+            className="block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="flex justify-center mt-4">
+        {/* Search button */}
+        <button
+          className="px-4 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
+      </div>
+      {/* Display search results */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Search Results</h2>
+        <ul>
+          {searchResults.map(result => (
+            <li key={result.id}>{result.trainName}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 

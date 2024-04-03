@@ -5,10 +5,12 @@ import { useAxiosInstance } from "../../../../api/axios";
 import useShowToast from "../../../hooks/useShowToast";
 import { Select } from "@chakra-ui/react";
 // import { Select, Option } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
- 
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 const TrainUpload = () => {
+  const user = JSON.parse(localStorage.getItem('ticket-flow'))
+  console.log(user)
   const [transportDetails, setTransportDetails] = useState({
     nameOrNumber: "",
     departureStation: "",
@@ -51,21 +53,23 @@ const TrainUpload = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-     // Assuming you have the company ID stored in localStorage or state
-     const companyId = localStorage.getItem('companyId'); // Adjust this according to how you store the company ID
 
-    
+    // Assuming you have the company ID stored in localStorage or state
+    const companyDetails = JSON.parse(localStorage.getItem('ticket-flow')); // Adjust this according to how you store the company ID
+    const companyId = companyDetails.result._id
+
     //Submit logic
+    console.log(companyDetails)
     try {
       //Your submit logit here
       const res = await axiosInstance.post(
-        "/company/upload-train",
-        JSON.stringify(transportDetails,companyId )
+        `/company/upload-train?companyId=${companyId}`,
+        JSON.stringify(transportDetails)
+
       );
       const data = res.data;
       console.log(data);
- 
+
       if (data.error) {
         showToast("Error", data.error, "error");
       } else {
@@ -75,12 +79,18 @@ const TrainUpload = () => {
     } catch (error) {
       showToast("Error", error.response.data.message || error.response.data.error, "error");
     }
-      setIsSubmitting(false);
-    }
-  
+    setIsSubmitting(false);
+  }
 
-   
-  
+
+  const allowedRoles = ["Company", "Admin"]
+  const isAuthorized = allowedRoles.includes(user?.roles[0])
+  console.log(isAuthorized)
+
+  if (!isAuthorized) {
+    return <Navigate to={'/dashboard'} replace />
+  }
+
 
   return (
     <SidebarWithHeader>

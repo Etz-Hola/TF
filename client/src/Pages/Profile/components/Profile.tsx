@@ -10,8 +10,10 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
-
 const Profile = () => {
+  const user = JSON.parse(localStorage.getItem("ticket-flow"));
+  const allowedRoles = ["Company", "Admin"];
+  const isAuthorized = allowedRoles.includes(user?.roles[0]);
   return (
     <div className="div">
       <Card className=" flex max-w-200 flex-row">
@@ -70,13 +72,15 @@ const Profile = () => {
       {/* <div className="div">
         <Button >Button</Button>
       </div> */}
-      <div className="div">
-      <Link to="/company/upload">
-        <Button className="your-button-styles">Uploade New train</Button>
-      </Link>
+      {isAuthorized && (
+        <div className="div">
+          <Link to="/company/upload">
+            <Button className="your-button-styles">Uploade New train</Button>
+          </Link>
+        </div>
+      )}
     </div>
-    </div>
-  ); 
+  );
 };
 
 export default Profile;
