@@ -20,7 +20,7 @@ const SearchTrain = () => {
     if (departureStation){
       const filtered = stations.arrivalStations.filter(el => el.toLowerCase() !== departureStation.toLowerCase())
       setStations((prev) => { return { ...prev, arrivalStations: filtered } })
-    }
+    } 
   }, [departureStation])
 
 
