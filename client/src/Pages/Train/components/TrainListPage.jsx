@@ -17,7 +17,7 @@ const TrainListPage = () => {
 
 
   useEffect(() => {
-    // fetchTrainData(); // Fetch data when component mounts
+    fetchTrainData(); // Fetch data when component mounts
     fetchTrainByCompany()
   }, []);
 

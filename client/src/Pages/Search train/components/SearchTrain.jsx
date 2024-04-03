@@ -16,14 +16,23 @@ const SearchTrain = () => {
     fetchStations();
   }, []);
 
+  useEffect(() => {
+    if (departureStation){
+      const filtered = stations.arrivalStations.filter(el => el.toLowerCase() !== departureStation.toLowerCase())
+      setStations((prev) => { return { ...prev, arrivalStations: filtered } })
+    }
+  }, [departureStation])
+
+
   // Function to fetch the list of stations from the backend
   const fetchStations = async () => {
     try {
       const response = await axiosInstance.get('/trains/get/search/station'); // Adjust the endpoint according to your backend API
       // Extract the list of stations from the response
       const stationsData = response.data;
-      const stationsList = stationsData.map(station => station.name);
-      setStations(stationsList); // Set the list of stations in the state
+      console.log(response.data)
+      // const stationsList = stationsData.map(station => station.name);
+      setStations(stationsData); // Set the list of stations in the state
     } catch (error) {
       console.error('Error fetching stations:', error);
       // If there's an error fetching stations, set stations to an empty array or handle it as appropriate
@@ -33,7 +42,7 @@ const SearchTrain = () => {
     }
   };
 
-  
+
 
   const handleSearch = async () => {
     try {
@@ -56,7 +65,10 @@ const SearchTrain = () => {
     }
   };
 
+
   return (
+
+
     <div className="container mx-auto mt-8">
       <div className="h-24 flex justify-center items-center shadow">
         <p className="uppercase font-bold text-4xl text-center">
@@ -71,10 +83,10 @@ const SearchTrain = () => {
             value={departureStation}
             onChange={(e) => setDepartureStation(e.target.value)}
           >
-            <option value="">Departure Station</option>
+            {/* <option value="">Departure Station</option> */}
             {/* Map through the stations array to dynamically populate options */}
-            {stations.map((station, index) => (
-              <option key={index} value={station}>{station}</option>
+            {stations?.departureStations?.map((departureStation, index) => (
+              <option key={index} value={departureStation}>{departureStation}</option>
             ))}
           </select>
         </div>
@@ -86,9 +98,9 @@ const SearchTrain = () => {
             value={arrivalStation}
             onChange={(e) => setArrivalStation(e.target.value)}
           >
-            <option value="">Arrival Station</option>
-            {stations.map((station, index) => (
-              <option key={index} value={station}>{station}</option>
+            {/* <option value="">Arrival Station</option> */}
+            {stations?.arrivalStations?.map((arrivalStation, index) => (
+              <option key={index} value={arrivalStation}>{arrivalStation}</option>
             ))}
           </select>
         </div>
@@ -122,6 +134,8 @@ const SearchTrain = () => {
         </ul>
       </div>
     </div>
+
+
   );
 };
 
