@@ -170,6 +170,29 @@ const searchTrainsByStations = async (req, res) => {
 };
 
 
+// const searchTrainsByStations = async (req, res) => {
+//   try {
+//     const { departureStation, arrivalStation, selectedDate } = req.query;
+
+//     // Construct the query object based on selected stations and date
+//     const query = {};
+//     if (departureStation) query.departureStation = departureStation;
+//     if (arrivalStation) query.arrivalStation = arrivalStation;
+//     if (selectedDate) query.departureTime = { $gte: new Date(selectedDate) };
+
+//     // Fetch transport data from the database based on the query
+//     const transports = await Transport.find(query);
+
+//     // Return the search results
+//     res.json({ searchResults: transports });
+//   } catch (error) {
+//     console.error('Error searching for trains:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
+
+
 
 
 

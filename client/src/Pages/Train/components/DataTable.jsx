@@ -170,10 +170,10 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
                 <input
                   type="text"
                   value={item.StanderdPrice}
-                  onChange={(e) => handleInputChange(index, "standardPrice", e.target.value)}
+                  onChange={(e) => handleInputChange(index, "StanderdPrice", e.target.value)}
                 />
               ) : (
-                item.standardPrice
+                item.StandardPrice
               )}
             </td> 
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

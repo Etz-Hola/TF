@@ -80,7 +80,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 					color: isActive ? "#fff" : "",
 					background: isActive ? "#3B82F6" : "",
 				})}
-				icon={AiFillGift}
+				// icon={AiFillGift}
 			>
 				Upload Train/Bus
 			</NavItem>
@@ -92,7 +92,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 					color: isActive ? "#fff" : "",
 					background: isActive ? "#3B82F6" : "",
 				})}
-				icon={AiFillGift}
+				// icon={AiFillGift}
 			>
 				Serch for Train/Bus
 			</NavItem>
@@ -106,7 +106,29 @@ const SidebarContent = ({ onClose, ...rest }) => {
 				})}
 				icon={AiFillGift}
 			>
-				InvoiceMe
+				My Ticket
+			</NavItem>
+			<NavItem
+				as={NavLink}
+				to={"/invoice-me"}
+				style={({ isActive }) => ({
+					color: isActive ? "#fff" : "",
+					background: isActive ? "#3B82F6" : "",
+				})}
+				// icon={AiFillGift}
+			>
+				Pa
+			</NavItem>
+			<NavItem
+				as={NavLink}
+				to={"/invoice-me"}
+				style={({ isActive }) => ({
+					color: isActive ? "#fff" : "",
+					background: isActive ? "#3B82F6" : "",
+				})}
+				// icon={AiFillGift}
+			>
+				In
 			</NavItem>
 			
 		</Box>
