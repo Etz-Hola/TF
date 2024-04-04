@@ -1,4 +1,8 @@
 
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { useAxiosInstance } from '/api/axios'; // Import Axios instance
 import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast hook
@@ -38,6 +42,8 @@ const SearchTrain = () => {
       // Extract the list of stations from the response
       const stationsData = response.data;
       console.log(response.data)
+
+
       // const stationsList = stationsData.map(station => station.name);
       setStations(stationsData); // Set the list of stations in the state
       setArrivalStations(stationsData.arrivalStations)
@@ -149,6 +155,152 @@ const SearchTrain = () => {
 };
 
 export default SearchTrain;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import { useAxiosInstance } from '/api/axios'; // Import Axios instance
+// import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast hook
+
+// const SearchTrain = () => {
+//   const [departureStation, setDepartureStation] = useState('');
+//   const [departureStations, setDepartureStations] = useState([]);
+//   const [selectedDate, setSelectedDate] = useState('');
+//   const [arrivalStation, setArrivalStation] = useState('');
+//   const [arrivalStations, setArrivalStations] = useState([]);
+//   const [stations, setStations] = useState({ departureStations: [], arrivalStations: [] }); // Initialize as an object
+//   const [searchResults, setSearchResults] = useState([]); // Initialize as an array
+//   const axiosInstance = useAxiosInstance(); // Initialize Axios instance
+//   const showToast = useShowToast(); // Initialize useShowToast hook
+
+//   // Fetch the list of stations when the component mounts
+//   useEffect(() => {
+//     fetchStations();
+//   }, []);
+
+//   // Function to fetch the list of stations from the backend
+//   const fetchStations = async () => {
+//     try {
+//       const response = await axiosInstance.get('/trains/get/search/station');
+//       const { departureStations, arrivalStations } = response.data;
+//       setStations({ departureStations, arrivalStations });
+//     } catch (error) {
+//       console.error('Error fetching stations:', error);
+//       showToast('Error fetching stations. Please try again later.', 'error');
+//     }
+//   };
+
+//   // Function to handle search
+//   const handleSearch = async () => {
+//     try {
+//       const response = await axiosInstance.get('/trains/get/search/station', {
+//         params: {
+//           departureStation: departureStation,
+//           arrivalStation: arrivalStation,
+//           selectedDate: selectedDate,
+//         },
+//       });
+//       setSearchResults(response.data || []); // Ensure setSearchResults always receives an array
+//       console.log('searchResults type:', typeof searchResults);
+//       if (!Array.isArray(response.data)) {
+//         // Handle unexpected API response format
+//         console.error('Unexpected API response:', response.data);
+//         showToast('Unexpected API response. Please try again later.', 'error');
+//         return;
+//       }
+//     } catch (error) {
+//       console.error('Error searching for trains:', error);
+//       showToast('Error searching for trains. Please try again later.', 'error');
+//     }
+//   };
+
+//   return (
+//     <div className="container mx-auto mt-8">
+//       <div className="h-24 flex justify-center items-center shadow">
+//         <p className="uppercase font-bold text-4xl text-center">
+//           Search Available Trains
+//         </p>
+//       </div>
+//       <div className="flex items-center justify-center">
+//         <div className="w-1/3">
+//           <select
+//             className="block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+//             value={departureStation}
+//             onChange={(e) => setDepartureStation(e.target.value)}
+//           >
+//             {stations.departureStations.map((station, index) => (
+//               <option key={index} value={station}>{station}</option>
+//             ))}
+//           </select>
+//         </div>
+//         <div className="mx-4"></div>
+//         <div className="w-1/3">
+//           <select
+//             className="block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+//             value={arrivalStation}
+//             onChange={(e) => setArrivalStation(e.target.value)}
+//           >
+//             {stations.arrivalStations.map((station, index) => (
+//               <option key={index} value={station}>{station}</option>
+//             ))}
+//           </select>
+//         </div>
+//         <div className="mx-4"></div>
+//         <div className="w-1/3">
+//           <input
+//             type="date"
+//             className="block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+//             value={selectedDate}
+//             onChange={(e) => setSelectedDate(e.target.value)}
+//           />
+//         </div>
+//       </div>
+//       <div className="flex justify-center mt-4">
+//         <button
+//           className="px-4 py-2 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+//           onClick={handleSearch}
+//         >
+//           Search
+//         </button>
+//       </div>
+//       <div className="mt-8">
+//         <h2 className="text-2xl font-bold mb-4">Search Results</h2>
+//         <ul>
+//           {searchResults.map(result => (
+//             <li key={result.id}>{result.trainName}</li>
+//           ))}
+//         </ul>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SearchTrain;
+
+
+
+
+
+
+
+
+
 
 
 
