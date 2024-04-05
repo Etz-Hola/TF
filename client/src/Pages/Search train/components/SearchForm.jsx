@@ -44,3 +44,8 @@ const SearchForm = ({ departureStations, arrivalStations, departureStation, arri
 };
 
 export default SearchForm;
+
+
+
+
+
