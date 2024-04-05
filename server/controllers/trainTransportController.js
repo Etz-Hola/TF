@@ -140,23 +140,44 @@ const getUploadedTrainsByCompanyId = async (req, res) => {
 //   }
 // };
 
-// Controller to fetch all trains from departure station to arrival station
+
+
 const getTrainsByStations = async (req, res) => {
   const { departureStation, arrivalStation } = req.query;
   try {
-    // Fetch trains based on departure and arrival stations
-    const trains = await Transport.find({
-      departureStation: departureStation,
-      arrivalStation: arrivalStation
-    });
+    let query = {};
+
+    // Check if departureStation is provided
+    if (departureStation) {
+      query.departureStation = departureStation;
+    }
+
+    // Check if arrivalStation is provided
+    if (arrivalStation) {
+      query.arrivalStation = arrivalStation;
+    }
+
+    // Fetch trains based on the constructed query
+    const trains = await Transport.find(query);
     
-    // Send the fetched trains as a response
-    res.json(trains);
+    // If both departure and arrival stations are provided but not matched, 
+    // fetch trains with either of the stations
+    if (departureStation && arrivalStation && trains.length === 0) {
+      const alternateTrains = await Transport.find({
+        $or: [{ departureStation }, { arrivalStation }],
+      });
+      res.json(alternateTrains);
+    } else {
+      // Send the fetched trains as a response
+      res.json(trains);
+    }
   } catch (error) {
     console.error('Error fetching trains by stations:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
 
 
 
