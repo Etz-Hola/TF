@@ -1,7 +1,17 @@
 // SearchForm.js
-import React from 'react';
+import React from "react";
 
-const SearchForm = ({ departureStations, arrivalStations, departureStation, arrivalStation, selectedDate, handleDepartureChange, handleArrivalChange, handleDateChange, handleSearch }) => {
+const SearchForm = ({
+  departureStations,
+  arrivalStations,
+  departureStation,
+  arrivalStation,
+  selectedDate,
+  handleDepartureChange,
+  handleArrivalChange,
+  handleDateChange,
+  handleSearch,
+}) => {
   return (
     <div className="flex justify-center items-center mb-4">
       <select
@@ -11,7 +21,9 @@ const SearchForm = ({ departureStations, arrivalStations, departureStation, arri
       >
         <option value="">Departure Station</option>
         {departureStations.map((station, index) => (
-          <option key={index} value={station}>{station}</option>
+          <option key={index} value={station}>
+            {station}
+          </option>
         ))}
       </select>
 
@@ -22,7 +34,9 @@ const SearchForm = ({ departureStations, arrivalStations, departureStation, arri
       >
         <option value="">Arrival Station</option>
         {arrivalStations.map((station, index) => (
-          <option key={index} value={station}>{station}</option>
+          <option key={index} value={station}>
+            {station}
+          </option>
         ))}
       </select>
 
@@ -44,8 +58,3 @@ const SearchForm = ({ departureStations, arrivalStations, departureStation, arri
 };
 
 export default SearchForm;
-
-
-
-
-

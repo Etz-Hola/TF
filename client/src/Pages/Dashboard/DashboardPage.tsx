@@ -11,7 +11,7 @@ const DashboardPage = () => {
       <Dashboard />
       <TrainCards />
 
-      
+       
 
       
     </SidebarWithHeader>
