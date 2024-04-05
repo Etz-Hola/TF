@@ -128,19 +128,6 @@ const getUploadedTrainsByCompanyId = async (req, res) => {
 
 
 
-// // Controller to fetch all trains from departure station to arrival station
-// const getTrainsByStations = async (req, res) => {
-//   // const { departureStation, arrivalStation } = req.query;
-//   try {
-//     const trains = await Transport.find();
-//     res.json(trains);
-//   } catch (error) {
-//     console.error('Error fetching trains station:', error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
-
-
 
 const getTrainsByStations = async (req, res) => {
   const { departureStation, arrivalStation } = req.query;
