@@ -128,14 +128,32 @@ const getUploadedTrainsByCompanyId = async (req, res) => {
 
 
 
+// // Controller to fetch all trains from departure station to arrival station
+// const getTrainsByStations = async (req, res) => {
+//   // const { departureStation, arrivalStation } = req.query;
+//   try {
+//     const trains = await Transport.find();
+//     res.json(trains);
+//   } catch (error) {
+//     console.error('Error fetching trains station:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
 // Controller to fetch all trains from departure station to arrival station
 const getTrainsByStations = async (req, res) => {
-  // const { departureStation, arrivalStation } = req.query;
+  const { departureStation, arrivalStation } = req.query;
   try {
-    const trains = await Transport.find();
+    // Fetch trains based on departure and arrival stations
+    const trains = await Transport.find({
+      departureStation: departureStation,
+      arrivalStation: arrivalStation
+    });
+    
+    // Send the fetched trains as a response
     res.json(trains);
   } catch (error) {
-    console.error('Error fetching trains station:', error);
+    console.error('Error fetching trains by stations:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -170,26 +188,11 @@ const searchTrainsByStations = async (req, res) => {
 };
 
 
-// const searchTrainsByStations = async (req, res) => {
-//   try {
-//     const { departureStation, arrivalStation, selectedDate } = req.query;
 
-//     // Construct the query object based on selected stations and date
-//     const query = {};
-//     if (departureStation) query.departureStation = departureStation;
-//     if (arrivalStation) query.arrivalStation = arrivalStation;
-//     if (selectedDate) query.departureTime = { $gte: new Date(selectedDate) };
 
-//     // Fetch transport data from the database based on the query
-//     const transports = await Transport.find(query);
 
-//     // Return the search results
-//     res.json({ searchResults: transports });
-//   } catch (error) {
-//     console.error('Error searching for trains:', error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
+
+
 
 
 
