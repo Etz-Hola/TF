@@ -195,6 +195,49 @@ const searchTrainsByStations = async (req, res) => {
   }
 };
 
+const getOutboundTrains = async (req, res) => {
+  const { departureStation, arrivalStation, selectedDate } = req.query;
+  try {
+    // Construct query to fetch outbound trains
+    const query = {
+      departureStation: departureStation,
+      arrivalStation: arrivalStation,
+      selectedDate: selectedDate
+    };
+
+    // Fetch outbound trains based on the constructed query
+    const outboundTrains = await Transport.find(query);
+    
+    // Send the fetched outbound trains as a response
+    res.json(outboundTrains);
+  } catch (error) {
+    console.error('Error fetching outbound trains:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const getReturnTrains = async (req, res) => {
+  const { departureStation, arrivalStation, selectedDate } = req.query;
+  try {
+    // Construct query to fetch return trains
+    const query = {
+      departureStation: arrivalStation, // Swap departure and arrival stations
+      arrivalStation: departureStation,
+      selectedDate: selectedDate
+    };
+
+    // Fetch return trains based on the constructed query
+    const returnTrains = await Transport.find(query);
+    
+    // Send the fetched return trains as a response
+    res.json(returnTrains);
+  } catch (error) {
+    console.error('Error fetching return trains:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
 
 
 
@@ -215,4 +258,6 @@ module.exports = {
   getUploadedTrainsByCompanyId,
   getTrainsByStations,
   searchTrainsByStations,
+  getOutboundTrains,
+  getReturnTrains,
 };

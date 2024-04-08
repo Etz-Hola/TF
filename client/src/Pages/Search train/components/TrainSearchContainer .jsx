@@ -1,14 +1,9 @@
-// TrainSearchContainer.js
 import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm';
 import TrainCard from './TrainCard';
 import TrainSearchResults from './TrainSearchResults';
 import { useAxiosInstance } from '/api/axios'; // Import Axios instance
 import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast hook
-
-
-
-
 
 const TrainSearchContainer = () => {
   const [trains, setTrains] = useState([]);
@@ -17,6 +12,7 @@ const TrainSearchContainer = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [departureStations, setDepartureStations] = useState([]);
   const [arrivalStations, setArrivalStations] = useState([]);
+  const [searchInitiated, setSearchInitiated] = useState(false); // State to track if search has been initiated
   const axiosInstance = useAxiosInstance();
   const showToast = useShowToast();
 
@@ -53,9 +49,9 @@ const TrainSearchContainer = () => {
         },
       });
       setTrains(response.data || []);
-      
-      // Check if no trains were found
-      if (response.data.length === 0) {
+
+      // Check if response.data is not null or undefined before accessing its length
+      if (response.data && response.data.length === 0) {
         showToast('No trains found for the selected criteria.', 'info');
       }
     } catch (error) {
@@ -77,9 +73,9 @@ const TrainSearchContainer = () => {
   };
 
   const handleSearch = () => {
+    setSearchInitiated(true); // Update search initiation state to true
     fetchTrains();
   };
-  console.log(fetchTrains)
 
   return (
     <div className="container mx-auto mt-8">
@@ -94,7 +90,7 @@ const TrainSearchContainer = () => {
         handleDateChange={handleDateChange}
         handleSearch={handleSearch}
       />
-      <TrainSearchResults trains={trains} />
+      {searchInitiated && <TrainSearchResults trains={trains} />}
     </div>
   );
 };

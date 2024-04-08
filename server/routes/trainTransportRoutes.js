@@ -8,6 +8,8 @@ const {
   updateTrainDetails,
   getTrainsByStations,
   searchTrainsByStations,
+  getOutboundTrains,
+  getReturnTrains,
   
 } = require("../controllers/trainTransportController");
 
@@ -32,8 +34,11 @@ router.get('/get/station', getTrainsByStations);
 // Route to search train details by station
 router.get('/get/search/station', searchTrainsByStations);
 
+// Route to fetch outbound trains
+router.get('/outbound', getOutboundTrains);
 
-
+// Route to fetch return trains
+router.get('/return', getReturnTrains);
 
 
 
