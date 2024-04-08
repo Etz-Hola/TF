@@ -17,23 +17,30 @@ const TrainListPage = () => {
 
 
   useEffect(() => {
-    // fetchTrainData(); // Fetch data when component mounts
+    fetchTrainData(); // Fetch data when component mounts
     fetchTrainByCompany()
   }, []);
 
   const fetchTrainData = async () => {
     try {
-      const response = await axiosInstance.get('/trains/all-trains/get');
-      // console.log(response);
-      if (response.status !== 200) { // Check for status code
-        throw new Error('Failed to fetch data');
+      // Check if the current user is an admin
+      const isAdmin = checkIfUserIsAdmin(); // Implement this function to check the user's role
+      
+      if (isAdmin) {
+        const response = await axiosInstance.get('/trains/all-trains/get');
+        
+        if (response.status !== 200) { // Check for status code
+          throw new Error('Failed to fetch data');
+        }
+        
+        const data = response.data; // Access data from the response
+        setTrainData(data);
       }
-      const data = response.data; // Access data from the response
-      setTrainData(data);
     } catch (error) {
       console.error('Error fetching train data:', error);
     }
   };
+  
 
 
   const fetchTrainByCompany = async () => {   

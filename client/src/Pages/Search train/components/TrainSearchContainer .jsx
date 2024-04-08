@@ -1,9 +1,13 @@
 // TrainSearchContainer.js
 import React, { useState, useEffect } from 'react';
 import SearchForm from './SearchForm';
-import SearchResults from './SearchResults';
+import TrainCard from './TrainCard';
+import TrainSearchResults from './TrainSearchResults';
 import { useAxiosInstance } from '/api/axios'; // Import Axios instance
 import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast hook
+
+
+
 
 
 const TrainSearchContainer = () => {
@@ -75,6 +79,7 @@ const TrainSearchContainer = () => {
   const handleSearch = () => {
     fetchTrains();
   };
+  console.log(fetchTrains)
 
   return (
     <div className="container mx-auto mt-8">
@@ -89,7 +94,7 @@ const TrainSearchContainer = () => {
         handleDateChange={handleDateChange}
         handleSearch={handleSearch}
       />
-      <SearchResults trains={trains} />
+      <TrainSearchResults trains={trains} />
     </div>
   );
 };

@@ -21,7 +21,8 @@ import CompanySignUp from './components/authentications/CompanySignUp';
 import CompanyLogin from './components/authentications/CompanyLogin';
 import TrainUpload from './Pages/Train/components/TrainUpload';
 import CompanyProfile from './Pages/Train/pages/CompanyProfile';
-import SearchTrainPage from './Pages/Search train/Pages/SearchTrainPage';
+// import SearchTrainPage from './Pages/Search train/Pages/SearchTrainPage';
+import TrainSearchContainer from './Pages/Search train/components/TrainSearchContainer ';
 
 
 
@@ -52,7 +53,8 @@ function App() {
           <Route path="profile/:userId" element={<ProfilePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/data" element={<CompanyProfile />} />
-          <Route path="/search/Train" element={<SearchTrainPage />} />
+          {/* <Route path="/search/Train" element={<SearchTrainPage />} /> */}
+          <Route path="/search/Train" element={<TrainSearchContainer />} />
           <Route path='company'>
             <Route path="upload" element={<TrainUpload />} />
             
