@@ -240,6 +240,32 @@ const getReturnTrains = async (req, res) => {
 
 
 
+// const getTicketPrice = async (req, res) => {
+//   try {
+//     const { class } = req.params; // Extract the ticket class from the request parameters
+//     const train = await Transport.findById(req.params.trainId); // Fetch the train details by ID or any other identifier
+    
+//     if (!train) {
+//       return res.status(404).json({ error: "Train not found" });
+//     }
+
+//     let price;
+//     // Determine the price based on the selected class
+//     if (class === 'standard') {
+//       price = train.standardPrice;
+//     } else if (class === 'firstClass') {
+//       price = train.firstClassPrice;
+//     } else {
+//       return res.status(400).json({ error: "Invalid ticket class" });
+//     }
+
+//     // Send the ticket price as a response
+//     res.json({ price });
+//   } catch (error) {
+//     console.error("Error getting ticket price:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 
 
@@ -260,4 +286,6 @@ module.exports = {
   searchTrainsByStations,
   getOutboundTrains,
   getReturnTrains,
+  // getTicketPrice,
+
 };

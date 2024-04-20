@@ -1,11 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAxiosInstance } from '/api/axios'; // Import Axios instance
 
 const TrainCard = ({ train }) => {
   const [selectedPrice, setSelectedPrice] = useState(null);
+  const [seatCount, setSeatCount] = useState(1);
+  const [selectedTicketClass, setSelectedTicketClass] = useState(null);
+  const [loading, setLoading] = useState(false);
+    const axiosInstance = useAxiosInstance();
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(`/api/trains/${train._id}/price/${selectedTicketClass}`);
+        setSelectedPrice(response.data.price);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching ticket price:', error);
+        setLoading(false);
+      }
+    };
+
+    if (selectedTicketClass) {
+      fetchData();
+    }
+  }, [selectedTicketClass, train._id]);
+
+  const handleSeatCountChange = (e) => {
+    setSeatCount(parseInt(e.target.value));
+  };
 
   const handlePriceChange = (event) => {
-    setSelectedPrice(event.target.value);
+    setSelectedTicketClass(event.target.id);
   };
+
+  const totalPrice = selectedPrice ? parseFloat(selectedPrice) * seatCount : 0;
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -44,27 +74,39 @@ const TrainCard = ({ train }) => {
           <input 
             type="checkbox" 
             id="standard" 
-            value="standard" 
-            checked={selectedPrice === 'standard'} 
+            checked={selectedTicketClass === 'standard'} 
             onChange={handlePriceChange} 
+            className="form-checkbox h-5 w-5 text-blue-500" 
             required
           />
-          <label htmlFor="standard" className="ml-2">Standard</label>
+          <label htmlFor="standard" className="ml-2">Standard (${train.standardPrice})</label>
         </div>
         <div>
           <input 
             type="checkbox" 
             id="firstClass" 
-            value="firstClass" 
-            checked={selectedPrice === 'firstClass'} 
+            checked={selectedTicketClass === 'firstClass'} 
             onChange={handlePriceChange} 
+            className="form-checkbox h-5 w-5 text-blue-500" 
             required
           />
-          <label htmlFor="firstClass" className="ml-2">1st Class</label>
+          <label htmlFor="firstClass" className="ml-2">1st Class (${train.firstClassPrice})</label>
         </div>
       </div>
+      <div className="flex justify-between mb-4">
+        <label htmlFor="seatCount">Number of Seats:</label>
+        <input 
+          type="number" 
+          id="seatCount" 
+          value={seatCount} 
+          onChange={handleSeatCountChange} 
+          min="1" 
+          max="10" 
+          required
+        />
+      </div>
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Book Your Ticket
+        {loading ? 'Loading...' : `Book Your ${selectedTicketClass ? `${selectedTicketClass === 'standard' ? 'Standard' : '1st Class'} Ticket(s) for ${seatCount} seat(s) ($${totalPrice})` : "Ticket"}`}
       </button>
     </div>
   );

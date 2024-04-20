@@ -89,7 +89,7 @@ const TrainSearchContainer = () => {
         handleArrivalChange={handleArrivalChange}
         handleDateChange={handleDateChange}
         handleSearch={handleSearch}
-      />
+      /> 
       {searchInitiated && <TrainSearchResults trains={trains} />}
     </div>
   );

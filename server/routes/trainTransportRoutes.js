@@ -10,6 +10,7 @@ const {
   searchTrainsByStations,
   getOutboundTrains,
   getReturnTrains,
+  // getTicketPrice,
   
 } = require("../controllers/trainTransportController");
 
@@ -39,6 +40,10 @@ router.get('/outbound', getOutboundTrains);
 
 // Route to fetch return trains
 router.get('/return', getReturnTrains);
+
+// // Route to fetch ticket price by ticket class
+// router.get('/:trainId/price/:class', getTicketPrice);
+
 
 
 
