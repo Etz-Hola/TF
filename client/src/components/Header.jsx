@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
+import TrainSearchContainer from "../Pages/Search train/components/TrainSearchContainer ";
 
 
 const Header = () => {
@@ -32,21 +33,15 @@ const Header = () => {
 
             <Text>Explore Around effortlessly by train and bus</Text>
           </Text>
-
-          <Box bg="white"
-          w={700}
-          height={39}
-          >
-            
-          </Box>
-
+          
+            {/* <TrainSearchContainer /> */}
 
         </Flex>
       </Flex>
 
-      <Box w='100%' h='200px' bgGradient='linear(to-r, green.200, pink.500)' />
+      {/* <Box w='100%' h='200px' bgGradient='linear(to-r, green.200, pink.500)' /> */}
       
-
+   
     </>
   );
 };

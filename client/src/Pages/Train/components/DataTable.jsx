@@ -10,7 +10,7 @@ const DataTable = ({ data, onEdit, onSave, setTrainData, onDelete }) => {
 
   const handleEdit = (index) => {
     onEdit(index);
-  };
+  }; 
 
   const handleSave = (index) => {
     onSave(index);

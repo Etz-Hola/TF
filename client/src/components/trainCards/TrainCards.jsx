@@ -40,7 +40,10 @@ const TrainCards = () => {
                                 <p>Arrival: {train.arrivalStation}</p>
                                 {/* Add more train details here */}
 
+                                <div className=''>
+
                                 <button>Get Full Details</button> 
+                                </div>
 
                             </div>
                             

@@ -1,31 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useAxiosInstance } from '/api/axios'; // Import Axios instance
+import { useNavigate } from 'react-router-dom';
 
 const TrainCard = ({ train }) => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [seatCount, setSeatCount] = useState(1);
   const [selectedTicketClass, setSelectedTicketClass] = useState(null);
   const [loading, setLoading] = useState(false);
-    const axiosInstance = useAxiosInstance();
-
+  const axiosInstance = useAxiosInstance();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/api/trains/${train._id}/price/${selectedTicketClass}`);
+        const response = await axiosInstance.get(`/trains/${train._id}/price/${selectedTicketClass}`);
         setSelectedPrice(response.data.price);
+        console.log(response)
         setLoading(false);
       } catch (error) {
         console.error('Error fetching ticket price:', error);
         setLoading(false);
       }
     };
-
-    if (selectedTicketClass) {
+     
+       
+    if (selectedTicketClass) { 
       fetchData();
     }
-  }, [selectedTicketClass, train._id]);
+  }, [selectedTicketClass, train._id, axiosInstance]);
+
+  const handleBookingPage = () => {
+    navigate(`/trains/${train._id}/book`);
+  }
 
   const handleSeatCountChange = (e) => {
     setSeatCount(parseInt(e.target.value));
@@ -95,7 +102,7 @@ const TrainCard = ({ train }) => {
       </div>
       <div className="flex justify-between mb-4">
         <label htmlFor="seatCount">Number of Seats:</label>
-        <input 
+        <input  
           type="number" 
           id="seatCount" 
           value={seatCount} 
@@ -105,7 +112,7 @@ const TrainCard = ({ train }) => {
           required
         />
       </div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      <button onClick={handleBookingPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         {loading ? 'Loading...' : `Book Your ${selectedTicketClass ? `${selectedTicketClass === 'standard' ? 'Standard' : '1st Class'} Ticket(s) for ${seatCount} seat(s) ($${totalPrice})` : "Ticket"}`}
       </button>
     </div>

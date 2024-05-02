@@ -26,12 +26,12 @@ const transportSchema = new mongoose.Schema({
   //     required: true
   //   }
   // }],
-  firstclassPrice: {
-    type: String,
+  firstClassPrice: { // Corrected typo: "firstclassPrice" to "firstClassPrice"
+    type: Number, // Changed type to Number for price
     required: true
   },
-  StanderdPrice: {
-    type: String,
+  standardPrice: { // Corrected typo: "StanderdPrice" to "standardPrice"
+    type: Number, // Changed type to Number for price
     required: true
   },
   arrivalStation: {

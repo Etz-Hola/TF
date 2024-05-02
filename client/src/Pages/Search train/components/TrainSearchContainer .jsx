@@ -4,6 +4,7 @@ import TrainCard from './TrainCard';
 import TrainSearchResults from './TrainSearchResults';
 import { useAxiosInstance } from '/api/axios'; // Import Axios instance
 import useShowToast from '../../../hooks/useShowToast'; // Import useShowToast hook
+import SidebarWithHeader from '../../../SidebarWithHeader';
 
 const TrainSearchContainer = () => {
   const [trains, setTrains] = useState([]);
@@ -78,7 +79,8 @@ const TrainSearchContainer = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8">
+   <SidebarWithHeader>
+     <div className="container mx-auto mt-8">
       <SearchForm
         departureStations={departureStations}
         arrivalStations={arrivalStations}
@@ -92,6 +94,7 @@ const TrainSearchContainer = () => {
       /> 
       {searchInitiated && <TrainSearchResults trains={trains} />}
     </div>
+   </SidebarWithHeader>
   );
 };
 

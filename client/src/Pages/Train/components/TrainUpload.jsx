@@ -16,8 +16,8 @@ const TrainUpload = () => {
     departureStation: "",
     ways: "",
     // types: "",
-    firstclassPrice: "",
-    StanderdPrice: "",
+    firstClassPrice: "",
+    standardPrice: "",
     arrivalStation: "",
     departureTime: "",
     arrivalTime: "",
@@ -157,16 +157,16 @@ const TrainUpload = () => {
             </Select> */}
 
             <Input
-              name="firstclassPrice"
-              value={transportDetails.firstclassPrice}
+              name="firstClassPrice"
+              value={transportDetails.firstClassPrice}
               onChange={handleChange}
               label="1st Class Price"
               placeholder="Price"
               required
             />
             <Input
-              name="StanderdPrice"
-              value={transportDetails.StanderdPrice}
+              name="standardPrice"
+              value={transportDetails.standardPrice}
               onChange={handleChange}
               label="Standerd Price"
               placeholder="Price"

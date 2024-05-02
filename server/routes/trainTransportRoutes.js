@@ -10,17 +10,19 @@ const {
   searchTrainsByStations,
   getOutboundTrains,
   getReturnTrains,
-  // getTicketPrice,
-  
+  getTicketPrice,
+
+   
 } = require("../controllers/trainTransportController");
 
 // Route to upload train details
 router.post("/", uploadTrainDetails);
 
+
 // Route for updating train details
 // router.put("/trains/:id", updateTrainDetails);
 
-// Route to fetch uploaded train details by company ID
+// Route to fetch uploaded train details by company ID   
 router.get("/company/:companyId", getUploadedTrainsByCompanyId);
 
 // Route to fetch All uploaded train details from the database
@@ -41,10 +43,12 @@ router.get('/outbound', getOutboundTrains);
 // Route to fetch return trains
 router.get('/return', getReturnTrains);
 
-// // Route to fetch ticket price by ticket class
-// router.get('/:trainId/price/:class', getTicketPrice);
+// Route to fetch ticket price by ticket class
+router.get('/:trainId/price/:class', getTicketPrice);
 
 
 
 
-module.exports = router;
+
+ 
+module.exports = router; 

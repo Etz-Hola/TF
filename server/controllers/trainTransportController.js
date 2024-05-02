@@ -15,8 +15,8 @@ const uploadTrainDetails = async (req, res) => {
       departureTime,
       arrivalTime,
       duration,
-      firstclassPrice,
-      StanderdPrice,
+      firstClassPrice,
+      standardPrice,
       availableSeats,
       returnTimeFromArrivalStation,
       arrivalTimeDepartureStation,
@@ -36,8 +36,8 @@ const uploadTrainDetails = async (req, res) => {
       departureTime,
       arrivalTime,
       duration,
-      firstclassPrice,
-      StanderdPrice,
+      firstClassPrice,
+      standardPrice,
       availableSeats,
       returnTimeFromArrivalStation,
       arrivalTimeDepartureStation,
@@ -232,7 +232,7 @@ const getReturnTrains = async (req, res) => {
     // Send the fetched return trains as a response
     res.json(returnTrains);
   } catch (error) {
-    console.error('Error fetching return trains:', error);
+    console.error('Error fetching return trains:', error); 
     res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -240,35 +240,36 @@ const getReturnTrains = async (req, res) => {
 
 
 
-// const getTicketPrice = async (req, res) => {
-//   try {
-//     const { class } = req.params; // Extract the ticket class from the request parameters
-//     const train = await Transport.findById(req.params.trainId); // Fetch the train details by ID or any other identifier
-    
-//     if (!train) {
-//       return res.status(404).json({ error: "Train not found" });
-//     }
-
-//     let price;
-//     // Determine the price based on the selected class
-//     if (class === 'standard') {
-//       price = train.standardPrice;
-//     } else if (class === 'firstClass') {
-//       price = train.firstClassPrice;
-//     } else {
-//       return res.status(400).json({ error: "Invalid ticket class" });
-//     }
-
-//     // Send the ticket price as a response
-//     res.json({ price });
-//   } catch (error) {
-//     console.error("Error getting ticket price:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
 
 
 
+const getTicketPrice = async (req, res) => {
+  try {
+    const { class: ticketClass, trainId } = req.params; 
+    const train = await Transport.findById(trainId); // Fetch the train details by ID or any other identifier
+
+    if (!train) {
+      console.log('result not found')
+      return res.status(404).json({ error: "Train not found" });
+    }
+
+    let price;
+    // Determine the price based on the selected class
+    if (ticketClass === 'standard') {
+      price = train.standardPrice;
+    } else if (ticketClass === 'firstClass') {
+      price = train.firstClassPrice;
+    } else {
+      return res.status(400).json({ error: "Invalid ticket class" });
+    }
+
+    // Send the ticket price as a response
+    res.json({ price });
+  } catch (error) {
+    console.error("Error getting ticket price:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}; 
 
 
 
@@ -286,6 +287,6 @@ module.exports = {
   searchTrainsByStations,
   getOutboundTrains,
   getReturnTrains,
-  // getTicketPrice,
+  getTicketPrice,
 
 };
