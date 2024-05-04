@@ -11,8 +11,6 @@ const {
   getOutboundTrains,
   getReturnTrains,
   getTicketPrice,
-
-   
 } = require("../controllers/trainTransportController");
 
 // Route to upload train details

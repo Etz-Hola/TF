@@ -64,7 +64,15 @@ const transportSchema = new mongoose.Schema({
   arrivalTimeDepartureStation: {
     type: String
   },
-
+  bookings: [{
+    user: { type: Schema.Types.ObjectId, ref: "User"},
+    departureTime: { type: Date },
+    arrivalTime: { type: Date },
+    seats: { type: Number },
+    individualPrice: { type: Number },
+    totalPrice: { type: Number },
+    timestamp: { type: Date, default: Date.now },
+  }],
   company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true }
 });
 

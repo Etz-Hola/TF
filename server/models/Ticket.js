@@ -1,4 +1,3 @@
-// models/Ticket.js
 const mongoose = require("mongoose");
 
 const ticketSchema = new mongoose.Schema({
@@ -26,30 +25,14 @@ const ticketSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
   seatType: {
     type: String,
     enum: ["firstClass", "standard"],
     required: true,
-  },
-  ticketId: {
-    type: String,
-    required: true,
-  },
-  departureStation: {
-    type: String,
-    required: true,
-  },
-  arrivalStation: {
-    type: String,
-    required: true,
-  },
-  departureTime: {
-    type: Date,
-    required: true,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now,
   },
 }, { timestamps: true });
 

@@ -33,6 +33,8 @@ const userSchema = new Schema(
 			},
 		},
 
+
+
     isCompany: {
       type: Boolean,
       default: false

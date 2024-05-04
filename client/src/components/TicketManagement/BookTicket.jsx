@@ -86,7 +86,7 @@ const BookTicket = () => {
       </div>
       <div className='mt-4'>
         <label className='font-bold'>Total Price:</label>
-        <span className='ml-2'>${totalPrice.toFixed(2)}</span>
+        <span className='ml-2'>${totalPrice.toFixed(0)}</span>
       </div>
       <div className='mt-8 flex justify-center'>
         <button 
