@@ -272,6 +272,85 @@ const getTicketPrice = async (req, res) => {
 }; 
 
 
+// Controller function to create a booking with seat selection and calculate price
+async function createBooking(req, res) {
+  try {
+    // Extracting parameters from request body
+    const { trainId, userId, login, bookings } = req.body;
+
+    // Validate required parameters
+    if (!trainId || !userId || !login || !bookings || !Array.isArray(bookings) || bookings.length === 0) {
+      return res.status(400).json({ message: "Invalid request data" });
+    }
+
+    // Fetching the transport details
+    const transport = await Transport.findById(trainId);
+
+    if (!transport) {
+      return res.status(404).json({ message: "Transport not found" });
+    }
+
+    const createdBookings = [];
+
+    // Loop through each booking in the request
+    for (const bookingData of bookings) {
+      const { seats, seatType, passengerName, passengerEmail } = bookingData;
+
+      // Validate required booking parameters
+      if (!seats || !seatType || !passengerName || !passengerEmail) {
+        return res.status(400).json({ message: "Invalid booking data" });
+      }
+
+      // Check if the requested seat type is valid
+      if (seatType !== 'firstClass' && seatType !== 'standard') {
+        return res.status(400).json({ message: "Invalid seat type" });
+      }
+
+      // Check if there are enough available seats
+      if (seats > transport.availableSeats) {
+        return res.status(400).json({ message: "Not enough available seats" });
+      }
+
+      // Calculate total price
+      const seatTypePrice = seatType === 'firstClass' ? transport.firstClassPrice : transport.standardPrice;
+      const totalPrice = seatTypePrice * seats;
+
+      // Create the booking
+      const newBooking = {
+        user: userId,
+        login: login,
+        seats: seats,
+        seatType: seatType,
+        individualPrice: seatTypePrice,
+        totalPrice: totalPrice,
+        passengerName: passengerName,
+        passengerEmail: passengerEmail,
+        ticketNumber: generateTicketNumber() // Function to generate a unique ticket number
+      };
+
+      // Push the booking to the bookings array
+      transport.bookings[0].bookingsPerDay.push(newBooking);
+
+      // Update the available seats
+      transport.availableSeats -= seats;
+
+      createdBookings.push(newBooking);
+    }
+
+    // Save the updated transport details
+    await transport.save();
+
+    // Provide detailed response about the created bookings
+    return res.status(201).json({ message: "Bookings created successfully", bookings: createdBookings });
+
+  } catch (error) {
+    console.error("Error creating bookings:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+
+
 
 
 
@@ -288,5 +367,6 @@ module.exports = {
   getOutboundTrains,
   getReturnTrains,
   getTicketPrice,
+  createBooking,
 
 };

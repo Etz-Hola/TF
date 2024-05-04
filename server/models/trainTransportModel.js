@@ -1,5 +1,3 @@
-// models/Transport.js
-
 const mongoose = require('mongoose');
 
 const transportSchema = new mongoose.Schema({
@@ -16,22 +14,12 @@ const transportSchema = new mongoose.Schema({
     enum: ['One Way', 'To and Fro'],
     required: true
   },
-  // types: [{
-  //   type: {
-  //     type: String,
-  //     required: true
-  //   },
-  //   price: {
-  //     type: Number,
-  //     required: true
-  //   }
-  // }],
-  firstClassPrice: { // Corrected typo: "firstclassPrice" to "firstClassPrice"
-    type: Number, // Changed type to Number for price
+  firstClassPrice: {
+    type: Number,
     required: true
   },
-  standardPrice: { // Corrected typo: "StanderdPrice" to "standardPrice"
-    type: Number, // Changed type to Number for price
+  standardPrice: {
+    type: Number,
     required: true
   },
   arrivalStation: {
@@ -50,10 +38,6 @@ const transportSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // ticketPrice: {
-  //   type: Number,
-  //   required: true
-  // },
   availableSeats: {
     type: Number,
     required: true
@@ -64,16 +48,30 @@ const transportSchema = new mongoose.Schema({
   arrivalTimeDepartureStation: {
     type: String
   },
+  company: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Company', 
+    required: true 
+  },
   bookings: [{
-    user: { type: Schema.Types.ObjectId, ref: "User"},
-    departureTime: { type: Date },
-    arrivalTime: { type: Date },
-    seats: { type: Number },
-    individualPrice: { type: Number },
-    totalPrice: { type: Number },
-    timestamp: { type: Date, default: Date.now },
-  }],
-  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true }
+    date: {
+      type: Date,
+      required: true
+    },
+    bookingsPerDay: [{
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+      departureTime: { type: Date },
+      arrivalTime: { type: Date },
+      seats: { type: Number },
+      individualPrice: { type: Number },
+      totalPrice: { type: Number },
+      timestamp: { type: Date, default: Date.now },
+      // New fields for passengers
+      passengerName: { type: String, required: true },
+      passengerEmail: { type: String, required: true },
+      ticketNumber: { type: String, required: true }
+    }]
+  }]
 });
 
 const Transport = mongoose.model('Transport', transportSchema);
