@@ -509,7 +509,7 @@ const handleStripeWebhook = async (req, res, next) => {
     } catch (error) {
       console.log('error', error)
       return res.status(400).send(`Webhook Error: ${error.message}`);
-    }
+    } 
 
     const session = event.data.object;
     const userId = session?.metadata?.userId;
