@@ -15,7 +15,8 @@ const {
   getTicketPrice,
   // createBooking,
   getBookingsByDate,
-  getBookedTickets
+  getBookedTickets,
+  purchaseTicket
   
 
 
@@ -52,7 +53,7 @@ router.get('/return', getReturnTrains);
 router.get('/:trainId/price/:class', getTicketPrice);
 
 // Route to create a booking for a specific train on a specific date
-router.post('/:trainId/bookings', createBooking);
+router.post('/:trainId/bookings', purchaseTicket);
 
 // Route to fetch booked tickets for a specific train on a specific date
 router.get('/:trainId/booked-tickets/:date', getBookingsByDate);

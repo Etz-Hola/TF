@@ -58,20 +58,34 @@ const transportSchema = new mongoose.Schema({
       type: Date,
       required: true
     },
+    remainingSeats: {
+      type: Number,
+      required: true
+    },
     bookingsPerDay: [{
       user: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
       departureTime: { type: Date },
       arrivalTime: { type: Date },
-      seats: { type: Number },
+      // seats: { type: Number },
       individualPrice: { type: Number, required: true },
-      totalPrice: { type: Number, required: true },
+      // totalPrice: { type: Number, required: true },
       timestamp: { type: Date, default: Date.now },
       // New fields for passengers
       passengerName: { type: String, required: true },
       passengerEmail: { type: String, required: true },
-      ticketNumber: { type: String, required: true }
+      ticketId: { type: String, required: true }
     }]
-  }]
+  }] 
+});
+
+// Middleware to calculate remaining seats
+transportSchema.pre('save', function(next) {
+  this.bookings.forEach(booking => {
+    let totalSeatsBooked = 0;
+    booking.bookingsPerDay.forEach(b => totalSeatsBooked += b.seats);
+    booking.remainingSeats = this.availableSeats - totalSeatsBooked;
+  });
+  next();
 });
 
 const Transport = mongoose.model('Transport', transportSchema);

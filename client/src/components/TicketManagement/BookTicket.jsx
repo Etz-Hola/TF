@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useCallback } from 'react';
+// import axios from 'axios';
+import { format } from "date-fns";
 import { useAxiosInstance } from '/api/axios';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'; // Import useHistory
 import useShowToast from '../../hooks/useShowToast';
+import { v4 as uuid } from 'uuid';
+
+const todayDate = new Date();
+
 
 const BookTicket = () => {
   const { trainId } = useParams();
@@ -11,10 +16,15 @@ const BookTicket = () => {
   const [numberOfSeats, setNumberOfSeats] = useState(1);
   const [passengers, setPassengers] = useState([{ name: '', email: '' }]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [standardPrice, setStandardPrice] = useState(0); // New state for standard price
-  const [firstClassPrice, setFirstClassPrice] = useState(0); // New state for first class price
+  const [selectedDate, setSelectedDate] = useState(todayDate);
+
+  const [standardPrice, setStandardPrice] = useState(0);
+  const [firstClassPrice, setFirstClassPrice] = useState(0);
   const axiosInstance = useAxiosInstance();
   const showToast = useShowToast();
+  const user = JSON.parse(localStorage.getItem("ticket-flow"));
+  const userId = user.result._id
+
 
   useEffect(() => {
     fetchTrainDetails();
@@ -22,46 +32,41 @@ const BookTicket = () => {
 
   const fetchTrainDetails = async () => {
     try {
-      const response = await axios.get(`/train/api/trains/${trainId}`);
+      const response = await axiosInstance.get(`/trains/${trainId}`); // Correct API route
       setTrain(response.data);
-      setSeatType('standard'); // Set default seat type
-
-      // Set prices based on train details
+      setSeatType('standard');
       setStandardPrice(response.data.standardPrice);
       setFirstClassPrice(response.data.firstClassPrice);
-
     } catch (error) {
       console.error('Error fetching train details:', error);
-      setTrain(null); // Set train to null if there's an error
+      setTrain(null);
       showToast('Error fetching train details. Please try again later.', 'error');
     }
   };
 
+  const handleDateChange = useCallback((e) => {
+    setSelectedDate(new Date(e.target.value));
+  }, []);
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [seatType, numberOfSeats, standardPrice, firstClassPrice]);
+
   const calculateTotalPrice = () => {
-    if (!seatType || !train || !train.availableSeats) return;
+    if (!seatType || !train) return;
 
-    let pricePerSeat;
-    if (seatType === 'firstClass') {
-      pricePerSeat = firstClassPrice || 0; // Use 0 if firstClassPrice is not available
-    } else {
-      pricePerSeat = standardPrice || 0; // Use 0 if standardPrice is not available
-    }
-
-    if (isNaN(pricePerSeat)) return; // Check if pricePerSeat is NaN
+    const pricePerSeat = seatType === 'firstClass' ? firstClassPrice : standardPrice;
+    console.log(pricePerSeat)
+    if (isNaN(pricePerSeat)) return;
 
     const totalPrice = pricePerSeat * numberOfSeats;
     setTotalPrice(totalPrice);
   };
 
   const handleSeatsChange = (e) => {
-    setNumberOfSeats(parseInt(e.target.value));
-    const newPassengers = [];
-    for (let i = 0; i < parseInt(e.target.value); i++) {
-      newPassengers.push({
-        name: '',
-        email: ''
-      });
-    }
+    const seats = parseInt(e.target.value);
+    setNumberOfSeats(seats);
+    const newPassengers = Array.from({ length: seats }, () => ({ name: '', email: '' }));
     setPassengers(newPassengers);
   };
 
@@ -75,6 +80,7 @@ const BookTicket = () => {
     setPassengers(updatedPassengers);
   };
 
+
   const handleBookTicket = async () => {
     try {
       if (!train || !seatType || !numberOfSeats || passengers.some(passenger => !passenger.name || !passenger.email)) {
@@ -82,28 +88,45 @@ const BookTicket = () => {
         return;
       }
 
-      if (numberOfSeats > train.availableSeats) {
+      const totalSeats = passengers.reduce((acc, curr) => acc + curr.numberOfSeats, 0);
+      if (totalSeats > train.availableSeats) {
         showToast('Not enough seats available.', 'error');
         return;
       }
 
+      const transportId = trainId // Change trainId to transportId
       const bookings = passengers.map(passenger => ({
-        trainId: trainId,
-        seatType: seatType,
-        numberOfSeats: 1,
-        passengerName: passenger.name,
-        passengerEmail: passenger.email
+        date: selectedDate, // You may want to specify the date of booking
+        bookingData: {
+          user: userId, // Assuming user is not being sent from the frontend
+          departureTime: train.departureTime, // Adjust as needed
+          arrivalTime: train.arrivalTime, // Adjust as needed
+          // seats: passenger.numberOfSeats,
+          individualPrice: handleSeatTypeChange === 'standard'? standardPrice : firstClassPrice, // Assuming same price for all seats
+          // totalPrice: passenger.numberOfSeats * train.standardPrice,
+          passengerName: passenger.name,
+          passengerEmail: passenger.email,
+          ticketId: uuid().slice(0, 18) // Implement your own ticket ID generation function
+        }
       }));
-      const responses = await Promise.all(bookings.map(booking =>
-        axiosInstance.post(`/tickets/bookings`, booking)
-      ));
-      console.log('Tickets booked successfully:', responses.map(res => res.data));
+      console.log(bookings)
+
+      const response = await axiosInstance.post(`/trains/${transportId}/bookings`, {userId, totalPrice: totalPrice, bookings }) // Adjust the endpoint
+
+      // console.log(response)
+      window.location.assign(response.data.url);
+
+      // console.log('Tickets booked successfully:', responses.map(res => res.data));
       showToast('Tickets booked successfully!', 'success');
+
+      // Redirect to booked tickets page
+      // history.push(`/booked-tickets/${trainId}`);
     } catch (error) {
       console.error('Error booking tickets:', error);
       showToast('Error booking tickets. Please try again later.', 'error');
     }
   };
+
 
   if (!train) return <div>Loading...</div>;
 
@@ -119,6 +142,18 @@ const BookTicket = () => {
           className='ml-2 border border-gray-300 rounded-md px-2 py-1'
         />
       </div>
+      <div className='flex items-center mt-10'>
+        <label className='font-bold'>Select Date:</label>
+        <input
+          placeholder="Select Date and Time"
+          type="date"
+          value={format(selectedDate, "yyyy-MM-dd")}
+          onChange={handleDateChange}
+          min={format(todayDate, "yyyy-MM-dd")}
+          className='ml-2 border border-gray-300 rounded-md px-2 py-1'
+        />
+      </div>
+
       <div className='mt-4'>
         <label className='font-bold'>Seat Type:</label>
         <div className='ml-2 flex items-center'>
@@ -166,6 +201,7 @@ const BookTicket = () => {
           </div>
         ))}
       </div>
+
       <div className='mt-8 flex justify-center'>
         <button
           onClick={handleBookTicket}
@@ -174,13 +210,12 @@ const BookTicket = () => {
           Make Payment
         </button>
       </div>
-      {/* <BookedTickets tickets={bookedTickets} /> Display booked tickets */}
-
     </div>
   );
 };
 
 export default BookTicket;
+
 
 
 
