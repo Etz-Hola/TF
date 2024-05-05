@@ -378,28 +378,28 @@ const getBookedTickets = async (req, res) => {
 };
 
 
-const purchaseCourse = async (req, res) => {
+const purchaseTicket = async (req, res) => {
 	try {
 		const userId = req.userId; // Assuming you have user information stored in req.user after authentication
-		const courseId = req.params.courseId;
+		const ticketId = req.params.ticketId;
 
-		// Find the course by its ID
-		const course = await Course.findById(courseId);
-		if (!course) {
-			return res.status(404).json({ message: "Course not found" });
+		// Find the ticket by its ID
+		const ticket = await Ticket.findById(ticketId);
+		if (!ticket) {
+			return res.status(404).json({ message: "Ticket not found" });
 		}
 
-		// Ensure the course is published
-		if (!course.isPublished) {
-			return res.status(403).json({ message: "Course is not published" });
+		// Ensure the ticket is published
+		if (!ticket.isPublished) {
+			return res.status(403).json({ message: "Ticket is not published" });
 		}
 
-		// Check if the user is already enrolled in the course
+		// Check if the user is already enrolled in the ticket
 		const user = await User.findById(userId);
-		if (user.enrolledCourses.includes(courseId)) {
+		if (user.enrolledTickets.includes(ticketId)) {
 			return res
 				.status(403)
-				.json({ message: "User is already enrolled in this course" });
+				.json({ message: "User is already enrolled in this ticket" });
 		}
 
 		const line_items = [
@@ -407,9 +407,9 @@ const purchaseCourse = async (req, res) => {
 				price_data: {
 					currency: "USD",
 					product_data: {
-						name: course.title,
+						name: ticket.title,
 					},
-					unit_amount: Math.round(course.price * 100),
+					unit_amount: Math.round(ticket.price * 100),
 				},
 				quantity: 1,
 			},
@@ -431,10 +431,10 @@ const purchaseCourse = async (req, res) => {
 			customer: stripeCustomer.stripeCustomerId,
 			line_items,
 			mode: "payment",
-			success_url: `http://localhost:5173/study/${courseId}?success=1`,
-			cancel_url: `http://localhost:5173/courses/${courseId}/info?cancelled=1`,
+			success_url: `http://localhost:5173/study/${ticketId}?success=1`,
+			cancel_url: `http://localhost:5173/tickets/${ticketId}/info?cancelled=1`,
 			metadata: {
-				courseId,
+				ticketId,
 				userId,
 			},
 		});
@@ -444,7 +444,7 @@ const purchaseCourse = async (req, res) => {
 		// res.json({ url: session.url });
 		res.json({ url: session.url });
 	} catch (error) {
-		console.error("[PURCHASE_COURSE]", error);
+		console.error("[PURCHASE_TICKET]", error);
 		res.status(500).json({ message: "Internal server error" });
 	}
 };
@@ -473,38 +473,38 @@ const handleStripeWebhook = async (req, res, next) => {
 
 		const session = event.data.object;
 		const userId = session?.metadata?.userId;
-		const courseId = session?.metadata?.courseId;
+		const ticketId = session?.metadata?.ticketId;
 		//   console.log(session)
 		//   console.log(userId)
-		//   console.log(courseId)
+		//   console.log(ticketId)
 
-		const course = await Course.findById(courseId);
-		const courseClassroom = await Classroom.findOne({ course: courseId });
+		const ticket = await Ticket.findById(ticketId);
+		const ticketClassroom = await Classroom.findOne({ ticket: ticketId });
 		const client = createStreamChatClient();
 
 		const user = await userModel.findById(userId);
 
 		if (event.type === "checkout.session.completed") {
-			if (!userId || !courseId) {
+			if (!userId || !ticketId) {
 				return res.status(400).send("Webhook Error: Missing metadata");
 			}
-			course.purchasedBy.push({ user: userId, amount: course.price });
-			await course.save();
+			ticket.purchasedBy.push({ user: userId, amount: ticket.price });
+			await ticket.save();
 
-			courseClassroom.students.push(userId);
-			await courseClassroom.save();
+			ticketClassroom.students.push(userId);
+			await ticketClassroom.save();
 
-			// Add the course to the enrolledCourses array in the user model
-			user.enrolledCourses.push(courseId);
+			// Add the ticket to the enrolledTickets array in the user model
+			user.enrolledTickets.push(ticketId);
 			await user.save();
 
-			const channel = client.channel("messaging", courseId);
+			const channel = client.channel("messaging", ticketId);
 			// console.log(channel)
 			await channel.addMembers([
 				{ user_id: userId, channel_role: "channel_member" },
 			]);
 
-			// await Purchase.create({ courseId, userId });
+			// await Purchase.create({ ticketId, userId });
 		} else {
 			return res
 				.status(200)
