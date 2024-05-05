@@ -63,8 +63,8 @@ const transportSchema = new mongoose.Schema({
       departureTime: { type: Date },
       arrivalTime: { type: Date },
       seats: { type: Number },
-      individualPrice: { type: Number },
-      totalPrice: { type: Number },
+      individualPrice: { type: Number, required: true },
+      totalPrice: { type: Number, required: true },
       timestamp: { type: Date, default: Date.now },
       // New fields for passengers
       passengerName: { type: String, required: true },

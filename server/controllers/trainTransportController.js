@@ -1,6 +1,7 @@
 // controllers/transportController.js
 
 const Transport = require("../models/trainTransportModel");
+const userModel = require("../models/userModel");
 
 const uploadTrainDetails = async (req, res) => {
   try {
@@ -325,7 +326,8 @@ async function createBooking(req, res) {
         totalPrice: totalPrice,
         passengerName: passengerName,
         passengerEmail: passengerEmail,
-        ticketNumber: generateTicketNumber() // Function to generate a unique ticket number
+        ticketNumber: generateTicketNumber(), // Function to generate a unique ticket number
+        timestamp: Date.now()
       };
 
       // Push the booking to the bookings array
@@ -350,10 +352,171 @@ async function createBooking(req, res) {
 }
 
 
+// Controller function to fetch booked tickets for a specific train on a specific date
+const getBookingsByDate = async (req, res) => {
+  try {
+    const { trainId, date } = req.params;
+    // Find all tickets booked for the given trainId and date
+    const bookedTickets = await Ticket.find({ trainId, date });
+    res.json({ bookings: bookedTickets }); // Send the booked tickets as a response
+  } catch (error) {
+    console.error('Error fetching booked tickets by date:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const getBookedTickets = async (req, res) => {
+  try {
+    const { trainId } = req.params;
+    // Find all tickets booked for the given trainId
+    const bookedTickets = await Ticket.find({ trainId });
+    res.json({ bookings: bookedTickets }); // Send the booked tickets as a response
+  } catch (error) {
+    console.error('Error fetching booked tickets:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 
+const purchaseCourse = async (req, res) => {
+	try {
+		const userId = req.userId; // Assuming you have user information stored in req.user after authentication
+		const courseId = req.params.courseId;
 
+		// Find the course by its ID
+		const course = await Course.findById(courseId);
+		if (!course) {
+			return res.status(404).json({ message: "Course not found" });
+		}
 
+		// Ensure the course is published
+		if (!course.isPublished) {
+			return res.status(403).json({ message: "Course is not published" });
+		}
+
+		// Check if the user is already enrolled in the course
+		const user = await User.findById(userId);
+		if (user.enrolledCourses.includes(courseId)) {
+			return res
+				.status(403)
+				.json({ message: "User is already enrolled in this course" });
+		}
+
+		const line_items = [
+			{
+				price_data: {
+					currency: "USD",
+					product_data: {
+						name: course.title,
+					},
+					unit_amount: Math.round(course.price * 100),
+				},
+				quantity: 1,
+			},
+		];
+
+		let stripeCustomer = await StripeCustomer.findOne({ userId });
+		if (!stripeCustomer) {
+			const customer = await stripe.customers.create({
+				email: user.email,
+			});
+			stripeCustomer = await StripeCustomer.create({
+				userId,
+				stripeCustomerId: customer.id,
+			});
+		}
+
+		// Create checkout session
+		const session = await stripe.checkout.sessions.create({
+			customer: stripeCustomer.stripeCustomerId,
+			line_items,
+			mode: "payment",
+			success_url: `http://localhost:5173/study/${courseId}?success=1`,
+			cancel_url: `http://localhost:5173/courses/${courseId}/info?cancelled=1`,
+			metadata: {
+				courseId,
+				userId,
+			},
+		});
+
+		// console.log(session)
+
+		// res.json({ url: session.url });
+		res.json({ url: session.url });
+	} catch (error) {
+		console.error("[PURCHASE_COURSE]", error);
+		res.status(500).json({ message: "Internal server error" });
+	}
+};
+
+const handleStripeWebhook = async (req, res, next) => {
+	try {
+		// console.log(req)
+		const { body, headers } = req;
+		const signature = headers["stripe-signature"];
+		//   console.log('body', body)
+		//   console.log('headers', headers)
+		//   console.log('signature', signature)
+
+		let event;
+		try {
+			event = stripe.webhooks.constructEvent(
+				body,
+				signature,
+				process.env.STRIPE_WEBHOOK_SECRET
+			);
+			// console.log(event)
+		} catch (error) {
+			// console.log('error', error)
+			return res.status(400).send(`Webhook Error: ${error.message}`);
+		}
+
+		const session = event.data.object;
+		const userId = session?.metadata?.userId;
+		const courseId = session?.metadata?.courseId;
+		//   console.log(session)
+		//   console.log(userId)
+		//   console.log(courseId)
+
+		const course = await Course.findById(courseId);
+		const courseClassroom = await Classroom.findOne({ course: courseId });
+		const client = createStreamChatClient();
+
+		const user = await userModel.findById(userId);
+
+		if (event.type === "checkout.session.completed") {
+			if (!userId || !courseId) {
+				return res.status(400).send("Webhook Error: Missing metadata");
+			}
+			course.purchasedBy.push({ user: userId, amount: course.price });
+			await course.save();
+
+			courseClassroom.students.push(userId);
+			await courseClassroom.save();
+
+			// Add the course to the enrolledCourses array in the user model
+			user.enrolledCourses.push(courseId);
+			await user.save();
+
+			const channel = client.channel("messaging", courseId);
+			// console.log(channel)
+			await channel.addMembers([
+				{ user_id: userId, channel_role: "channel_member" },
+			]);
+
+			// await Purchase.create({ courseId, userId });
+		} else {
+			return res
+				.status(200)
+				.send(`Webhook Error: Unhandled event type ${event.type}`);
+		}
+
+		res.status(200).send();
+	} catch (error) {
+		console.error("[HANDLE_STRIPE_WEBHOOK]", error);
+		res.status(500).send("Internal server error");
+	}
+};
 
 
 module.exports = {
@@ -368,5 +531,8 @@ module.exports = {
   getReturnTrains,
   getTicketPrice,
   createBooking,
+  getBookingsByDate,
+  getBookedTickets,
+  handleStripeWebhook
 
 };

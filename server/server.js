@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
 const companyRoutes = require("./routes/companyRoutes");
 const refreshRoute = require("./routes/refresh");
+const webhook = require("./routes/webhook");
 const trainTransportRoutes = require("./routes/trainTransportRoutes");
 require("./config/passport-setup");
 
@@ -57,6 +58,7 @@ app.use("/auth", authRoutes);
 app.use("/refresh", refreshRoute);
 app.use("/company", companyRoutes);
 app.use("/trains", trainTransportRoutes);
+app.use("/api", webhook);
 
 mongoose
 	.connect(process.env.MONGO_URI)

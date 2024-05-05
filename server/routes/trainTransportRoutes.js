@@ -14,7 +14,11 @@ const {
   getReturnTrains,
   getTicketPrice,
   // createBooking,
-  // getBookingsByDate
+  getBookingsByDate,
+  getBookedTickets
+  
+
+
 } = require("../controllers/trainTransportController");
 
 // Route to upload train details
@@ -50,7 +54,10 @@ router.get('/:trainId/price/:class', getTicketPrice);
 // Route to create a booking for a specific train on a specific date
 router.post('/:trainId/bookings', createBooking);
 
-// Route to get bookings for a specific train on a specific date
-// router.get('/:trainId/bookings/:date', getBookingsByDate);
+// Route to fetch booked tickets for a specific train on a specific date
+router.get('/:trainId/booked-tickets/:date', getBookingsByDate);
+
+// Route to fetch booked tickets for a specific train
+router.get('/:trainId/booked-tickets', getBookedTickets);
 
 module.exports = router;
