@@ -64,8 +64,8 @@ const transportSchema = new mongoose.Schema({
     },
     bookingsPerDay: [{
       user: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
-      departureTime: { type: Date },
-      arrivalTime: { type: Date },
+      departureTime: { type: String },
+      arrivalTime: { type: String },
       // seats: { type: Number },
       individualPrice: { type: Number, required: true },
       // totalPrice: { type: Number, required: true },

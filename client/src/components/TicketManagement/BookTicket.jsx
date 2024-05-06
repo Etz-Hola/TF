@@ -95,23 +95,27 @@ const BookTicket = () => {
       }
 
       const transportId = trainId // Change trainId to transportId
-      const bookings = passengers.map(passenger => ({
-        date: selectedDate, // You may want to specify the date of booking
-        bookingData: {
+      const bookingDetails = passengers.map(passenger => {
+        return {
           user: userId, // Assuming user is not being sent from the frontend
           departureTime: train.departureTime, // Adjust as needed
           arrivalTime: train.arrivalTime, // Adjust as needed
           // seats: passenger.numberOfSeats,
-          individualPrice: handleSeatTypeChange === 'standard'? standardPrice : firstClassPrice, // Assuming same price for all seats
+          individualPrice: handleSeatTypeChange === 'standard' ? standardPrice : firstClassPrice, // Assuming same price for all seats
           // totalPrice: passenger.numberOfSeats * train.standardPrice,
           passengerName: passenger.name,
           passengerEmail: passenger.email,
           ticketId: uuid().slice(0, 18) // Implement your own ticket ID generation function
         }
-      }));
+      });
+
+      const bookings = {
+        date: selectedDate, // You may want to specify the date of booking
+        bookingData: bookingDetails
+      }
       console.log(bookings)
 
-      const response = await axiosInstance.post(`/trains/${transportId}/bookings`, {userId, totalPrice: totalPrice, bookings }) // Adjust the endpoint
+      const response = await axiosInstance.post(`/trains/${transportId}/bookings`, { userId, totalPrice: totalPrice, bookings }) // Adjust the endpoint
 
       // console.log(response)
       window.location.assign(response.data.url);

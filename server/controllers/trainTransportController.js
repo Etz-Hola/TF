@@ -4,6 +4,7 @@ const StripeCustomer = require("../models/StripeCustomerModel");
 const Transport = require("../models/trainTransportModel");
 const userModel = require("../models/userModel");
 // const uuid = require("uuid").v4;
+const jwt = require("jsonwebtoken");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 const uploadTrainDetails = async (req, res) => {
@@ -411,7 +412,7 @@ const getBookedTickets = async (req, res) => {
   } catch (error) {
     console.error("Error fetching booked tickets:", error);
     res.status(500).json({ message: "Internal server error" });
-  }
+  } 
 };
 
 const purchaseTicket = async (req, res) => {
@@ -464,6 +465,15 @@ const purchaseTicket = async (req, res) => {
       });
     }
 
+    // const bookingsToken = jwt.sign(
+    //   {
+    //     bookings: bookings,
+    //   },
+    //   process.env.ACCESS_TOKEN_SECRET
+    // );
+
+    // console.log("purchaseTicketToken", bookingsToken);
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomer.stripeCustomerId,
@@ -475,11 +485,12 @@ const purchaseTicket = async (req, res) => {
         trainId,
         userId,
         bookings: JSON.stringify(bookings),
+        // bookings: bookingsToken,
         totalPrice,
       },
     });
 
-    // console.log(session)
+    // console.log(session);
 
     // res.json({ url: session.url });
     res.json({ url: session.url });
@@ -494,9 +505,9 @@ const handleStripeWebhook = async (req, res, next) => {
     // console.log(req)
     const { body, headers } = req;
     const signature = headers["stripe-signature"];
-      // console.log('body', body)
-      // console.log('headers', headers)
-      // console.log('signature', signature)
+    // console.log('body', body)
+    // console.log('headers', headers)
+    // console.log('signature', signature)
 
     let event;
     try {
@@ -507,20 +518,37 @@ const handleStripeWebhook = async (req, res, next) => {
       );
       // console.log(event)
     } catch (error) {
-      console.log('error', error)
+      console.log("error", error);
       return res.status(400).send(`Webhook Error: ${error.message}`);
-    } 
+    }
 
     const session = event.data.object;
     const userId = session?.metadata?.userId;
     const trainId = session?.metadata?.trainId;
-    const bookingData = JSON.parse(session?.metadata?.bookings);
+    let bookings = session?.metadata?.bookings;
+    // bookings = JSON.parse(bookings);
+    // const bookingsToken = session?.metadata?.bookings;
+    console.log("session", session);
+    console.log("bookings", bookings);
+
+    // console.log('bookingsToken', bookingsToken)
+
+    // let bookings;
+
+    // jwt.verify(
+    //   bookingsToken,
+    //   process.env.ACCESS_TOKEN_SECRET,
+    //   (err, decoded) => {
+    //     if (err) return res.sendStatus(403); //invalid token
+    //     bookings = decoded.bokings;
+    //   } 
+    // );
     //   console.log(session)
     //   console.log(userId)
-    //   console.log(trainId)
+    console.log("bookings", bookings);
 
     const transport = await Transport.findById(trainId);
-    console.log(transport)
+    console.log(transport);
 
     if (!transport) {
       return res.status(404).json({ error: "Transport not found" });
@@ -528,35 +556,39 @@ const handleStripeWebhook = async (req, res, next) => {
 
     // Find the bookings for the given date or create a new one if it doesn't exist
     let bookingsForDate = transport.bookings.find(
-      (booking) => booking.date.toDateString() === new Date(date).toDateString()
+      (booking) =>
+        booking.date.toDateString() === new Date(bookings.date).toDateString()
     );
     if (!bookingsForDate) {
       bookingsForDate = {
-        date: date,
+        date: new Date(bookings.date),
         remainingSeats: transport.availableSeats,
         bookingsPerDay: [],
       };
       transport.bookings.push(bookingsForDate);
     }
 
-    // // Add ticket data to ticketsPerDay
-    // bookingsForDate.bookingsPerDay.push(...bookingData);
-
-    // // Save the transport with the updated tickets
-    // await transport.save();
-
-    // const user = await userModel.findById(userId);
-
     if (event.type === "checkout.session.completed") {
       if (!userId || !trainId) {
         return res.status(400).send("Webhook Error: Missing metadata");
       }
       // Add ticket data to ticketsPerDay
-      bookingsForDate.bookingsPerDay.push(...bookingData);
+      bookingsForDate.bookingsPerDay.push(...bookings.bookingData);
+
+      // Correctly calculate remaining seats
+      bookingsForDate.remainingSeats =
+        transport.availableSeats - bookingsForDate.bookingsPerDay.length;
+
+      // Update the transport document with the new bookingsForDate
+      transport.bookings = transport.bookings.map((b) =>
+        b.date.toDateString() === bookingsForDate.date.toDateString()
+          ? bookingsForDate
+          : b
+      );
 
       // Save the transport with the updated tickets
       await transport.save();
-      console.log(transport)
+      console.log("transportt", transport);
 
       // await Purchase.create({ ticketId, userId });
     } else {

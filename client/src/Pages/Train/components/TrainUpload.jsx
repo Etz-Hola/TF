@@ -4,18 +4,14 @@ import { Input, Button } from "@material-tailwind/react";
 import { useAxiosInstance } from "../../../../api/axios";
 import useShowToast from "../../../hooks/useShowToast";
 import { Select } from "@chakra-ui/react";
-// import { Select, Option } from "@material-tailwind/react";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
 const TrainUpload = () => {
-  const user = JSON.parse(localStorage.getItem('ticket-flow'))
-  console.log(user)
+  const user = JSON.parse(localStorage.getItem('ticket-flow'));
   const [transportDetails, setTransportDetails] = useState({
     nameOrNumber: "",
     departureStation: "",
     ways: "",
-    // types: "",
     firstClassPrice: "",
     standardPrice: "",
     arrivalStation: "",
@@ -26,7 +22,6 @@ const TrainUpload = () => {
     returnTimeFromArrivalStation: "",
     arrivalTimeDepartureStation: "",
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const axiosInstance = useAxiosInstance();
   const [isValid, setIsValid] = useState(false);
@@ -39,11 +34,8 @@ const TrainUpload = () => {
     setIsValid(isValid);
   }, [transportDetails]);
 
-
   const handleChange = (e) => {
-    // console.log(e)
     const { name, value } = e.target;
-    console.log(name)
     setTransportDetails((prevState) => ({
       ...prevState,
       [name]: value,
@@ -54,27 +46,27 @@ const TrainUpload = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Assuming you have the company ID stored in localStorage or state
-    const companyDetails = JSON.parse(localStorage.getItem('ticket-flow')); // Adjust this according to how you store the company ID
-    const companyId = companyDetails.result._id
+    if (!isValid) {
+      showToast("Error", "Please fill in all required fields", "error");
+      setIsSubmitting(false);
+      return;
+    }
 
-    //Submit logic
-    console.log(companyDetails)
+    const companyDetails = JSON.parse(localStorage.getItem('ticket-flow'));
+    const companyId = companyDetails.result._id;
+
     try {
-      //Your submit logit here
       const res = await axiosInstance.post(
         `/company/upload-train?companyId=${companyId}`,
         JSON.stringify(transportDetails)
-
       );
       const data = res.data;
-      console.log(data);
-
       if (data.error) {
         showToast("Error", data.error, "error");
       } else {
         showToast("Success", "Transport details uploaded successfully", "success");
-        navigate(`/company/edit-train/${data.train._id}`);
+        // Navigate to the profile page
+        navigate(`/profile/${user.result._id}`);
       }
     } catch (error) {
       showToast("Error", error.response.data.message || error.response.data.error, "error");
@@ -82,24 +74,21 @@ const TrainUpload = () => {
     setIsSubmitting(false);
   }
 
-
-  const allowedRoles = ["Company", "Admin"]
-  const isAuthorized = allowedRoles.includes(user?.roles[0])
-  console.log(isAuthorized)
+  const allowedRoles = ["Company", "Admin"];
+  const isAuthorized = allowedRoles.includes(user?.roles[0]);
 
   if (!isAuthorized) {
-    return <Navigate to={'/dashboard'} replace />
+    return <Navigate to={'/dashboard'} replace />;
   }
-
 
   return (
     <SidebarWithHeader>
-      <div className=" gap-y-2">
-        <div className="div text-center ">
-          <h2 className="text-5xl ">Upload Your Train </h2>
+      <div className="gap-y-2">
+        <div className="text-center">
+          <h2 className="text-5xl">Upload Your Train</h2>
         </div>
-        <form onSubmit={handleSubmit} place-content>
-          <div className="grid grid-cols-2 gap-4 p-6 ">
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-4 p-6">
             <Input
               name="nameOrNumber"
               value={transportDetails.nameOrNumber}
@@ -108,7 +97,6 @@ const TrainUpload = () => {
               placeholder="Enter train name or number"
               required
             />
-
             <Input
               name="departureStation"
               value={transportDetails.departureStation}
@@ -117,7 +105,6 @@ const TrainUpload = () => {
               placeholder="Enter departure station"
               required
             />
-
             <Input
               name="arrivalStation"
               value={transportDetails.arrivalStation}
@@ -126,8 +113,8 @@ const TrainUpload = () => {
               placeholder="Enter arrival station"
               required
             />
-
-            <Select placeholder='Select option'
+            <Select
+              placeholder="Select option"
               name="ways"
               value={transportDetails.ways}
               onChange={handleChange}
@@ -136,26 +123,9 @@ const TrainUpload = () => {
               placeholder="Select ways"
               required
             >
-              {/* <Option value="One Way">One Way</Option>
-              <Option value="To and Fro">To and Fro</Option> */}
               <option value='One Way'>One Way</option>
               <option value="To and Fro">To and Fro</option>
             </Select>
-
-            {/* 
-            <Select
-              name="types"
-              value={transportDetails.types}
-              onChange={handleChange}
-              variant="outline"
-              label="Type"
-              placeholder="Select type"
-              required
-            >
-              <Option value="One Way">1st Class</Option> 
-              <Option value="To and Fro">Standerd</Option>
-            </Select> */}
-
             <Input
               name="firstClassPrice"
               value={transportDetails.firstClassPrice}
@@ -168,11 +138,10 @@ const TrainUpload = () => {
               name="standardPrice"
               value={transportDetails.standardPrice}
               onChange={handleChange}
-              label="Standerd Price"
+              label="Standard Price"
               placeholder="Price"
               required
             />
-
             <Input
               name="departureTime"
               value={transportDetails.departureTime}
@@ -181,7 +150,6 @@ const TrainUpload = () => {
               type="time"
               required
             />
-
             <Input
               name="arrivalTime"
               value={transportDetails.arrivalTime}
@@ -190,7 +158,6 @@ const TrainUpload = () => {
               type="time"
               required
             />
-
             <Input
               name="duration"
               value={transportDetails.duration}
@@ -199,17 +166,6 @@ const TrainUpload = () => {
               placeholder="Enter duration of the journey"
               required
             />
-
-            {/* <Input
-              name="ticketPrice"
-              value={transportDetails.ticketPrice}
-              onChange={handleChange}
-              label="Ticket Price"
-              type="number"
-              placeholder="Enter ticket price"
-              required
-            /> */}
-
             <Input
               name="availableSeats"
               value={transportDetails.availableSeats}
@@ -219,7 +175,6 @@ const TrainUpload = () => {
               placeholder="Enter number of available seats"
               required
             />
-
             <Input
               name="returnTimeFromArrivalStation"
               value={transportDetails.returnTimeFromArrivalStation}
@@ -228,7 +183,6 @@ const TrainUpload = () => {
               type="time"
               required
             />
-
             <Input
               name="arrivalTimeDepartureStation"
               value={transportDetails.arrivalTimeDepartureStation}
@@ -239,8 +193,13 @@ const TrainUpload = () => {
             />
           </div>
           <div className="text-center">
-            <Button type="submit" color="blue" ripple="light">
-              Upload Transport Details
+            <Button
+              type="submit"
+              color="blue"
+              ripple="light"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Upload Transport Details"}
             </Button>
           </div>
         </form>

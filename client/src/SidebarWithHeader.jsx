@@ -82,7 +82,19 @@ const SidebarContent = ({ onClose, ...rest }) => {
 				})}
 				// icon={AiFillGift}
 			>
-				Upload Train/Bus
+				Upload New Train
+			</NavItem>
+
+			<NavItem
+				as={NavLink}
+				to={`/profile/${user.result._id}`}
+				style={({ isActive }) => ({
+					color: isActive ? "#fff" : "",
+					background: isActive ? "#3B82F6" : "",
+				})}
+				// icon={AiFillGift}
+			>
+				My Available train
 			</NavItem>
 
 			<NavItem
@@ -94,7 +106,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 				})}
 				// icon={AiFillGift}
 			>
-				Serch for Train/Bus
+				Search for Train/Bus
 			</NavItem>
 			
 			<NavItem
@@ -164,9 +176,11 @@ const NavItem = ({ icon, children, ...rest }) => {
 	);
 };
 
+const user = JSON.parse(localStorage.getItem('ticket-flow'))
+
+
 const MobileNav = ({ onOpen, ...rest }) => {
 	const logout = useLogout();
-	const user = JSON.parse(localStorage.getItem('ticket-flow'))
 	// console.log(user)
 	const navigate = useNavigate();
 
@@ -232,7 +246,7 @@ console.log(user)
 							bg={useColorModeValue("white", "gray.900")}
 							borderColor={useColorModeValue("gray.200", "gray.700")}
 						>
-							<MenuItem onClick={() => navigate(`/profile/${user.result._id}`)}>Profile</MenuItem>
+							<MenuItem onClick={() => navigate(`/editProfile/${user.result._id}`)}>Profile</MenuItem>
 							<MenuDivider />
 							<MenuItem onClick={logout}>Sign out</MenuItem>
 						</MenuList>

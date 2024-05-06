@@ -25,6 +25,7 @@ import CompanyProfile from "./Pages/Train/pages/CompanyProfile";
 import TrainSearchContainer from "./Pages/Search train/components/TrainSearchContainer ";
 import TicketBooking from "./Pages/TicketManagement/TicketBooking";
 import BookedTickets from "./components/TicketManagement/BookedTickets";
+import TrainDetails from "./Pages/Search train/components/TrainDetails";
 
 function App() {
   // const user = userAtom
@@ -56,6 +57,8 @@ function App() {
           {/* <Route path="/" element={<HomePage />} /> */}
           <Route path="/" element={<HomePage />} />
           <Route path="profile/:userId" element={<ProfilePage />} />
+          <Route path="profile/:userId" element={<TrainDetails />} />
+
           <Route path="/about" element={<AboutPage />} />
           <Route path="/data" element={<CompanyProfile />} />
           {/* <Route path="/search/Train" element={<SearchTrainPage />} /> */}

@@ -39,10 +39,13 @@ app.use(
 );
 
 
+
+
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
 app.use(credentials);
 
+app.use('/api', express.raw({ type: 'application/json' }));
 // Middleware to initialize passport
 app.use(passport.initialize());
 app.use(passport.session());

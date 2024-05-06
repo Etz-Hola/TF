@@ -1,9 +1,13 @@
 // TrainDetails.js
-import React from 'react';
+
+import TrainListPage from "../../Train/components/TrainListPage";
 
 const TrainDetails = () => {
-  // Add train details UI here if needed
-  return <div>Train Details</div>;
+  return (
+    <>
+      <TrainListPage />
+    </>
+  );
 };
 
 export default TrainDetails;
