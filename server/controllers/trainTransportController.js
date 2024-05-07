@@ -5,6 +5,7 @@ const Transport = require("../models/trainTransportModel");
 const userModel = require("../models/userModel");
 // const uuid = require("uuid").v4;
 const jwt = require("jsonwebtoken");
+const { sendMail } = require("../utils/sendMail");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 const uploadTrainDetails = async (req, res) => {
@@ -412,7 +413,7 @@ const getBookedTickets = async (req, res) => {
   } catch (error) {
     console.error("Error fetching booked tickets:", error);
     res.status(500).json({ message: "Internal server error" });
-  } 
+  }
 };
 
 const purchaseTicket = async (req, res) => {
@@ -489,8 +490,8 @@ const purchaseTicket = async (req, res) => {
         totalPrice,
       },
     });
-
-    // console.log(session);
+ 
+    console.log(session);
 
     // res.json({ url: session.url });
     res.json({ url: session.url });
@@ -526,11 +527,14 @@ const handleStripeWebhook = async (req, res, next) => {
     const userId = session?.metadata?.userId;
     const trainId = session?.metadata?.trainId;
     let bookings = session?.metadata?.bookings;
-    console.log('first bookings',bookings)
+    console.log("first bookings", bookings);
     bookings = JSON.parse(bookings);
     // const bookingsToken = session?.metadata?.bookings;
     console.log("session", session);
     console.log("bookings", bookings);
+
+    const user = await userModel.findById(userId);
+
 
     // console.log('bookingsToken', bookingsToken)
 
@@ -542,7 +546,7 @@ const handleStripeWebhook = async (req, res, next) => {
     //   (err, decoded) => {
     //     if (err) return res.sendStatus(403); //invalid token
     //     bookings = decoded.bokings;
-    //   } 
+    //   }
     // );
     //   console.log(session)
     //   console.log(userId)
@@ -587,6 +591,51 @@ const handleStripeWebhook = async (req, res, next) => {
           : b
       );
 
+
+
+      const trainData = bookings.bookingData.map((data) => {
+        return {
+          train: transport.nameOrNumber,
+          departure: transport.departureStation,
+          arrival: transport.arrivalStation,
+          date: bookings.date,
+          ticketId: data.ticketId,
+          price: data.individualPrice,
+          passengerName: data.passengerName,
+          passengerEmail: data.passengerEmail,
+          arrivalTime: data.arrivalTime,
+          departureTime: data.departureTime,
+        };
+      });
+
+      const fullData = { user: { name: user.name }, tickets: trainData };
+
+
+      // const data = {
+      //   train: transport.nameOrNumber,
+      //   departure: transport.departureStation,
+      //   arrival: transport.arrivalStation,
+      //   date: bookings.date,
+      //   bookings: bookings.bookingData,
+      //   price: bookings.totalPrice,
+      // };
+
+      try {
+        await sendMail({
+          email: user.email,
+          subject: "Ticket Successfully purchased ",
+          template: "bookticket.ejs",
+          data: fullData,
+        });
+        res.status(201).json({
+          success: true,
+          message: `Please check your email ${user.email}`,
+        });
+      } catch (error) {
+        console.log(error);
+        return res.status(400).json({ error: error.message });
+      }
+
       // Save the transport with the updated tickets
       await transport.save();
       console.log("transportt", transport);
@@ -598,15 +647,12 @@ const handleStripeWebhook = async (req, res, next) => {
         .send(`Webhook Error: Unhandled event type ${event.type}`);
     }
 
-    res.status(200).send();
+    // res.status(200).send();
   } catch (error) {
     console.error("[HANDLE_STRIPE_WEBHOOK]", error);
     res.status(500).send("Internal server error");
   }
 };
-
-
-
 
 // const handleStripeWebhook = async (req, res, next) => {
 //   try {
@@ -697,22 +743,22 @@ const handleStripeWebhook = async (req, res, next) => {
 //   }
 // };
 
-
-
-const fetchBookings = async ( req, res) => {
+const fetchBookings = async (req, res) => {
   try {
     const userId = req.params.userId;
     // console.log(userId)
 
     // Find all transports where the user has bookings
-    const transports = await Transport.find({ 'bookings.bookingsPerDay.user': userId });
+    const transports = await Transport.find({
+      "bookings.bookingsPerDay.user": userId,
+    });
 
     const tickets = [];
 
     // Iterate over each transport to extract relevant booking information
-    transports.forEach(transport => {
-      transport.bookings.forEach(booking => {
-        booking.bookingsPerDay.forEach(ticket => {
+    transports.forEach((transport) => {
+      transport.bookings.forEach((booking) => {
+        booking.bookingsPerDay.forEach((ticket) => {
           // If the user ID matches, add the ticket to the list
           // console.log(ticket)
           if (ticket.user.toString() === userId) {
@@ -725,24 +771,52 @@ const fetchBookings = async ( req, res) => {
               price: ticket.individualPrice,
               ticketId: ticket.ticketId,
               timestamp: ticket.timestamp,
-              passengerName: ticket.passengerName
+              passengerName: ticket.passengerName,
             });
           }
         });
       });
     });
-console.log(tickets)
+    console.log(tickets);
     res.status(200).json(tickets);
   } catch (error) {
     res.status(500).send("Internal server error");
   }
 };
 
+const getUserTicketsInfo = async (req, res) => {
+  try {
+    const userId = req.params.userId;
 
+    // Find all transports where the user has bookings
+    const transports = await Transport.find({
+      "bookings.bookingsPerDay.user": userId,
+    });
 
+    const ticketsInfo = [];
 
+    // Iterate over each transport to extract relevant booking information
+    transports.forEach((transport) => {
+      transport.bookings.forEach((booking) => {
+        booking.bookingsPerDay.forEach((ticket) => {
+          // If the user ID matches, add the ticket information to the list
+          if (ticket.user.toString() === userId) {
+            ticketsInfo.push({
+              ticketId: ticket.ticketId,
+              price: ticket.individualPrice,
+              timestamp: ticket.timestamp,
+              trainId: transport._id, // Assuming trainId is the _id of the Transport model
+            });
+          }
+        });
+      });
+    });
 
-
+    res.status(200).json(ticketsInfo);
+  } catch (error) {
+    res.status(500).send("Internal server error");
+  }
+};
 
 module.exports = {
   uploadTrainDetails,
@@ -761,4 +835,5 @@ module.exports = {
   handleStripeWebhook,
   purchaseTicket,
   fetchBookings,
+  getUserTicketsInfo,
 };

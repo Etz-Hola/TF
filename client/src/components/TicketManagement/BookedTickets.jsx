@@ -1,19 +1,35 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { useAxiosInstance } from '/api/axios'; // Corrected import statement
+import SidebarWithHeader from '../../SidebarWithHeader';
+
+
 
 const BookedTickets = () => {
-  // Dummy data for demonstration
-  const bookedTickets = [
-    { ticketNumber: '12345', date: '2024-05-07', trainId: 'T123' },
-    { ticketNumber: '54321', date: '2024-05-08', trainId: 'T456' },
-    // Add more ticket data as needed
-  ];
+  const [bookedTickets, setBookedTickets] = useState([]);
+  const user = JSON.parse(localStorage.getItem("ticket-flow"));
+  const userId = user?.result?._id || null;
+  const axiosInstance = useAxiosInstance();
+
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await axiosInstance.get(`/trains/userTickets/${userId} `);
+        setBookedTickets(response.data);
+      } catch (error) {
+        console.error('Error fetching tickets:', error);
+      }
+    };
+
+    if (userId) {
+      fetchTickets();
+    }
+  }, [userId]); // Fetch tickets when userId changes
 
   return (
-
- 
-
-    <div className="bg-white shadow-md rounded-md p-4 mx-auto ">
-      <h2 className="text-center font-bold text-lg mb-4">My Ticket Tickets</h2>
+    <SidebarWithHeader>
+      <div className="bg-white shadow-md rounded-md p-4 mx-auto ">
+      <h2 className="text-center font-bold text-lg mb-4">My Tickets</h2>
       <div className="overflow-x-auto">
         <table className="table-auto w-full">
           <thead>
@@ -27,9 +43,9 @@ const BookedTickets = () => {
           <tbody>
             {bookedTickets.map((ticket, index) => (
               <tr key={index}>
-                <td className="border px-4 py-2 font-semibold">{ticket.ticketNumber}</td>
-                <td className="border px-4 py-2 font-semibold">{ticket.ticketPrice}</td>
-                <td className="border px-4 py-2 font-semibold">{ticket.date}</td>
+                <td className="border px-4 py-2 font-semibold">{ticket.ticketId}</td>
+                <td className="border px-4 py-2 font-semibold">{ticket.price}</td>
+                <td className="border px-4 py-2 font-semibold">{new Date(ticket.timestamp).toLocaleDateString()}</td>
                 <td className="border px-4 py-2 font-semibold">{ticket.trainId}</td>
               </tr>
             ))}
@@ -37,11 +53,11 @@ const BookedTickets = () => {
         </table>
       </div>
     </div>
+    </SidebarWithHeader>
   );
 }
 
 export default BookedTickets;
-
 
 
 

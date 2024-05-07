@@ -109,7 +109,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
                         background: isActive ? "#3B82F6" : "",
                     })}
                 >
-                    My Ticket
+                    Tickets
                 </NavItem>
             )}
 
@@ -124,20 +124,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
                 Search for Train
             </NavItem>
             
-            {/* Additional NavItems */}
+           
             <NavItem
                 as={NavLink}
-                to={"/invoice-me"}
-                style={({ isActive }) => ({
-                    color: isActive ? "#fff" : "",
-                    background: isActive ? "#3B82F6" : "",
-                })}
-            >
-                Pa
-            </NavItem>
-            <NavItem
-                as={NavLink}
-                to={""}
+                to={" "}
 				onClick={logout}
                 style={({ isActive }) => ({
                     color: isActive ? "#fff" : "",

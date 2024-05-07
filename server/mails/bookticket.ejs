@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Ticket Booking Confirmation</title>
+    <style>
+        /* Some basic styling, feel free to adjust */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, p {
+            text-align: center;
+        }
+        .ticket-details {
+            margin-top: 30px;  
+        }
+        .ticket-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ticket-details th, .ticket-details td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .ticket-details th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Train Ticket Booking Confirmation</h1>
+        <p>Dear <%= user.name %>,</p>
+        <p>Your train ticket(s) have been successfully booked. Here are the details:</p>
+        
+        <div class="ticket-details">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Train</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Dept. Time</th>
+                        <th>Arr. Time</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Ticket ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% tickets.forEach(ticket => { %>
+                        <tr>
+                            <td><%= ticket.train %></td>
+                            <td><%= ticket.departure %></td>
+                            <td><%= ticket.arrival %></td>
+                            <td><%= ticket.departureTime %></td>
+                            <td><%= ticket.arrivalTime %></td>
+                            <td><%= ticket.date %></td>
+                            <td>$<%= ticket.price.toFixed(2) %></td>
+                            <td><%= ticket.ticketId %></td>
+                            <td><%= ticket.passengerName %></td>
+                            <td><%= ticket.passengerEmail %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        
+        <p>Thank you for choosing our service.</p>
+        <p>Best regards,</p>
+        <p>Your Train Booking Team</p>
+    </div>
+</body>
+</html>

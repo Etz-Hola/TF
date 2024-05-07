@@ -10,7 +10,7 @@ const TicketBooking = () => {
 
             <BookTicket />
             {/* <TicketBooking /> */}
-            <BookedTickets />
+            {/* <BookedTickets /> */}
         </SidebarWithHeader>
         </>
     )

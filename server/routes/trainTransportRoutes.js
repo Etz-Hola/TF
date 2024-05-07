@@ -18,6 +18,7 @@ const {
   getBookedTickets,
   purchaseTicket,
   fetchBookings,
+  getUserTicketsInfo,
   
 
 
@@ -62,7 +63,12 @@ router.get('/:trainId/booked-tickets/:date', getBookingsByDate);
 // Route to fetch booked tickets for a specific train
 router.get('/:trainId/booked-tickets', getBookedTickets);
 
+// Route to fetch all bookings for a user
 router.get('/tickets/:userId', fetchBookings);
+
+
+// Route to fetch specific ticket information for a user
+router.get('/userTickets/:userId', getUserTicketsInfo);
 
 
 
