@@ -61,6 +61,7 @@ app.use("/auth", authRoutes);
 app.use("/refresh", refreshRoute);
 app.use("/company", companyRoutes);
 app.use("/trains", trainTransportRoutes);
+// app.use("/ticket", trainTransportRoutes);
 app.use("/api", webhook);
 
 mongoose

@@ -1,6 +1,7 @@
 import React from 'react'
 import BookTicket from '../../components/TicketManagement/BookTicket'
 import SidebarWithHeader from '../../SidebarWithHeader'
+import BookedTickets from '../../components/TicketManagement/BookedTickets'
 
 const TicketBooking = () => {
     return (
@@ -9,6 +10,7 @@ const TicketBooking = () => {
 
             <BookTicket />
             {/* <TicketBooking /> */}
+            <BookedTickets />
         </SidebarWithHeader>
         </>
     )

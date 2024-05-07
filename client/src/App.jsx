@@ -26,6 +26,7 @@ import TrainSearchContainer from "./Pages/Search train/components/TrainSearchCon
 import TicketBooking from "./Pages/TicketManagement/TicketBooking";
 import BookedTickets from "./components/TicketManagement/BookedTickets";
 import TrainDetails from "./Pages/Search train/components/TrainDetails";
+import TicketList from "./components/TicketManagement/TicketList";
 
 function App() {
   // const user = userAtom
@@ -42,7 +43,10 @@ function App() {
         />
         <Route path="/forget-password" element={<ForgetingPwd />} />
         <Route path="/activate-form" element={<VerifyEmailForm />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />}>
+          <Route path="profile" element={<TicketList />} />
+        </Route>
+      
 
         <Route
           element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}

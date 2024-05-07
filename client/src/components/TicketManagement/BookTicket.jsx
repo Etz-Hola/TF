@@ -22,6 +22,7 @@ const BookTicket = () => {
   const [firstClassPrice, setFirstClassPrice] = useState(0);
   const axiosInstance = useAxiosInstance();
   const showToast = useShowToast();
+  
   const user = JSON.parse(localStorage.getItem("ticket-flow"));
   const userId = user.result._id
 
@@ -81,48 +82,97 @@ const BookTicket = () => {
   };
 
 
+  // const handleBookTicket = async () => {
+  //   try {
+  //     if (!train || !seatType || !numberOfSeats || passengers.some(passenger => !passenger.name || !passenger.email)) {
+  //       showToast('Please fill all passenger details.', 'error');
+  //       return;
+  //     }
+
+  //     const totalSeats = passengers.reduce((acc, curr) => acc + curr.numberOfSeats, 0);
+  //     if (totalSeats > train.availableSeats) {
+  //       showToast('Not enough seats available.', 'error');
+  //       return;
+  //     }
+
+  //     const transportId = trainId // Change trainId to transportId
+  //     const bookingDetails = passengers.map(passenger => {
+  //       return {
+  //         user: userId, // Assuming user is not being sent from the frontend
+  //         departureTime: train.departureTime, // Adjust as needed
+  //         arrivalTime: train.arrivalTime, // Adjust as needed
+  //         // seats: passenger.numberOfSeats,
+  //         individualPrice: handleSeatTypeChange === 'standard' ? standardPrice : firstClassPrice, // Assuming same price for all seats
+  //         // totalPrice: passenger.numberOfSeats * train.standardPrice,
+  //         passengerName: passenger.name,
+  //         passengerEmail: passenger.email,
+  //         ticketId: uuid().slice(0, 18) // Implement your own ticket ID generation function
+  //       }
+  //     });
+
+  //     const bookings = {
+  //       date: selectedDate, // You may want to specify the date of booking
+  //       bookingData: bookingDetails
+  //     }
+  //     console.log(bookings)
+
+  //     const response = await axiosInstance.post(`/trains/${transportId}/bookings`, { userId, totalPrice: totalPrice, bookings }) // Adjust the endpoint
+
+  //     // console.log(response)
+  //     window.location.assign(response.data.url);
+
+  //     // console.log('Tickets booked successfully:', responses.map(res => res.data));
+  //     showToast('Continue with the payment!', 'success');
+
+  //     // Redirect to booked tickets page
+  //     // history.push(`/booked-tickets/${trainId}`);
+  //   } catch (error) {
+  //     console.error('Error booking tickets:', error);
+  //     showToast('Error booking tickets. Please try again later.', 'error');
+  //   }
+  // };
+
+
+
   const handleBookTicket = async () => {
     try {
       if (!train || !seatType || !numberOfSeats || passengers.some(passenger => !passenger.name || !passenger.email)) {
         showToast('Please fill all passenger details.', 'error');
         return;
       }
-
+  
       const totalSeats = passengers.reduce((acc, curr) => acc + curr.numberOfSeats, 0);
       if (totalSeats > train.availableSeats) {
         showToast('Not enough seats available.', 'error');
         return;
       }
-
-      const transportId = trainId // Change trainId to transportId
-      const bookingDetails = passengers.map(passenger => {
-        return {
-          user: userId, // Assuming user is not being sent from the frontend
-          departureTime: train.departureTime, // Adjust as needed
-          arrivalTime: train.arrivalTime, // Adjust as needed
-          // seats: passenger.numberOfSeats,
-          individualPrice: handleSeatTypeChange === 'standard' ? standardPrice : firstClassPrice, // Assuming same price for all seats
-          // totalPrice: passenger.numberOfSeats * train.standardPrice,
-          passengerName: passenger.name,
-          passengerEmail: passenger.email,
-          ticketId: uuid().slice(0, 18) // Implement your own ticket ID generation function
-        }
-      });
-
+  
+      const transportId = trainId; // Change trainId to transportId
+      const bookingDetails = passengers.map(passenger => ({
+        user: userId, // Assuming user is not being sent from the frontend
+        departureTime: train.departureTime, // Adjust as needed
+        arrivalTime: train.arrivalTime, // Adjust as needed
+        individualPrice: handleSeatTypeChange === 'standard' ? standardPrice : firstClassPrice, // Assuming same price for all seats
+        passengerName: passenger.name,
+        passengerEmail: passenger.email,
+        ticketId: uuid().slice(0, 18) // Implement your own ticket ID generation function
+      }));
+  
       const bookings = {
         date: selectedDate, // You may want to specify the date of booking
         bookingData: bookingDetails
-      }
-      console.log(bookings)
-
-      const response = await axiosInstance.post(`/trains/${transportId}/bookings`, { userId, totalPrice: totalPrice, bookings }) // Adjust the endpoint
-
+      };
+  
+      console.log("bookings", bookings); // Ensure correct structure of bookings object
+  
+      const response = await axiosInstance.post(`/trains/${transportId}/bookings`, { userId, totalPrice: totalPrice, bookings }); // Adjust the endpoint
+  
       // console.log(response)
       window.location.assign(response.data.url);
-
+  
       // console.log('Tickets booked successfully:', responses.map(res => res.data));
-      showToast('Tickets booked successfully!', 'success');
-
+      showToast('Continue with the payment!!', 'success');
+  
       // Redirect to booked tickets page
       // history.push(`/booked-tickets/${trainId}`);
     } catch (error) {
@@ -130,6 +180,7 @@ const BookTicket = () => {
       showToast('Error booking tickets. Please try again later.', 'error');
     }
   };
+  
 
 
   if (!train) return <div>Loading...</div>;

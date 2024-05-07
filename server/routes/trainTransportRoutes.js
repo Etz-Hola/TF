@@ -16,7 +16,8 @@ const {
   // createBooking,
   getBookingsByDate,
   getBookedTickets,
-  purchaseTicket
+  purchaseTicket,
+  fetchBookings,
   
 
 
@@ -60,5 +61,9 @@ router.get('/:trainId/booked-tickets/:date', getBookingsByDate);
 
 // Route to fetch booked tickets for a specific train
 router.get('/:trainId/booked-tickets', getBookedTickets);
+
+router.get('/tickets/:userId', fetchBookings);
+
+
 
 module.exports = router;

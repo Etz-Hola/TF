@@ -526,7 +526,8 @@ const handleStripeWebhook = async (req, res, next) => {
     const userId = session?.metadata?.userId;
     const trainId = session?.metadata?.trainId;
     let bookings = session?.metadata?.bookings;
-    // bookings = JSON.parse(bookings);
+    console.log('first bookings',bookings)
+    bookings = JSON.parse(bookings);
     // const bookingsToken = session?.metadata?.bookings;
     console.log("session", session);
     console.log("bookings", bookings);
@@ -604,6 +605,154 @@ const handleStripeWebhook = async (req, res, next) => {
   }
 };
 
+
+
+
+// const handleStripeWebhook = async (req, res, next) => {
+//   try {
+//     const { body, headers } = req;
+//     const signature = headers["stripe-signature"];
+
+//     let event;
+//     try {
+//       event = stripe.webhooks.constructEvent(
+//         body,
+//         signature,
+//         process.env.STRIPE_WEBHOOK_SECRET
+//       );
+//     } catch (error) {
+//       console.log("error", error);
+//       return res.status(400).send(`Webhook Error: ${error.message}`);
+//     }
+
+//     const session = event.data.object;
+//     const userId = session?.metadata?.userId;
+//     const trainId = session?.metadata?.trainId;
+//     let bookingsToken = session?.metadata?.bookings;
+
+//     let bookings;
+
+//     try {
+//       bookings = jwt.verify(bookingsToken, process.env.ACCESS_TOKEN_SECRET).bookings;
+//     } catch (err) {
+//       console.error("Error verifying JWT:", err);
+//       return res.sendStatus(403); // Forbidden
+//     }
+
+//     console.log("bookings", bookings);
+
+//     const transport = await Transport.findById(trainId);
+
+//     if (!transport) {
+//       return res.status(404).json({ error: "Transport not found" });
+//     }
+
+//     // Find the bookings for the given date or create a new one if it doesn't exist
+//     let bookingsForDate = transport.bookings.find(
+//       (booking) =>
+//         booking.date.toDateString() === new Date(bookings.date).toDateString()
+//     );
+//     if (!bookingsForDate) {
+//       bookingsForDate = {
+//         date: new Date(bookings.date),
+//         remainingSeats: transport.availableSeats,
+//         bookingsPerDay: [],
+//       };
+//       transport.bookings.push(bookingsForDate);
+//     }
+
+//     if (event.type === "checkout.session.completed") {
+//       if (!userId || !trainId) {
+//         return res.status(400).send("Webhook Error: Missing metadata");
+//       }
+//       // Add ticket data to bookingsPerDay
+//       bookingsForDate.bookingsPerDay.push(...bookings.bookingData);
+
+//       // Correctly calculate remaining seats
+//       bookingsForDate.remainingSeats =
+//         transport.availableSeats - bookingsForDate.bookingsPerDay.length;
+
+//       // Update the transport document with the new bookingsForDate
+//       transport.bookings = transport.bookings.map((b) =>
+//         b.date.toDateString() === bookingsForDate.date.toDateString()
+//           ? bookingsForDate
+//           : b
+//       );
+
+//       // Save the transport with the updated bookings
+//       await transport.save();
+//       console.log("transport", transport);
+
+//       // await Purchase.create({ ticketId, userId });
+//     } else {
+//       return res
+//         .status(200)
+//         .send(`Webhook Error: Unhandled event type ${event.type}`);
+//     }
+
+//     res.status(200).send();
+//   } catch (error) {
+//     console.error("[HANDLE_STRIPE_WEBHOOK]", error);
+//     res.status(500).send("Internal server error");
+//   }
+// };
+
+
+
+const fetchBookings = async ( req, res) => {
+  try {
+    const userId = req.params.userId;
+    // console.log(userId)
+
+    // Find all transports where the user has bookings
+    const transports = await Transport.find({ 'bookings.bookingsPerDay.user': userId });
+
+    const tickets = [];
+
+    // Iterate over each transport to extract relevant booking information
+    transports.forEach(transport => {
+      transport.bookings.forEach(booking => {
+        booking.bookingsPerDay.forEach(ticket => {
+          // If the user ID matches, add the ticket to the list
+          // console.log(ticket)
+          if (ticket.user.toString() === userId) {
+            tickets.push({
+              date: booking.date,
+              departureStation: transport.departureStation,
+              departureTime: transport.departureTime,
+              arrivalStation: transport.arrivalStation,
+              arrivalTime: transport.arrivalTime,
+              price: ticket.individualPrice,
+              ticketId: ticket.ticketId,
+              timestamp: ticket.timestamp,
+              passengerName: ticket.passengerName
+            });
+          }
+        });
+      });
+    });
+console.log(tickets)
+    res.status(200).json(tickets);
+  } catch (error) {
+    res.status(500).send("Internal server error");
+  }
+};
+
+// const getTicketsByUserId = async (req, res) => {
+//   const userId = req.params.userId;
+
+//   try {
+//     const tickets = await fetchBookings(userId);
+//     res.status(200).json(tickets);
+//   } catch (error) {
+//     res.status(500).send("Internal server error");
+//   }
+// };
+
+
+
+
+
 module.exports = {
   uploadTrainDetails,
   updateTrainDetails,
@@ -620,4 +769,5 @@ module.exports = {
   getBookedTickets,
   handleStripeWebhook,
   purchaseTicket,
+  fetchBookings,
 };
