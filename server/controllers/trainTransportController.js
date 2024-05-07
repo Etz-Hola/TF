@@ -738,16 +738,7 @@ console.log(tickets)
   }
 };
 
-// const getTicketsByUserId = async (req, res) => {
-//   const userId = req.params.userId;
 
-//   try {
-//     const tickets = await fetchBookings(userId);
-//     res.status(200).json(tickets);
-//   } catch (error) {
-//     res.status(500).send("Internal server error");
-//   }
-// };
 
 
 
