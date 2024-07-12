@@ -11,7 +11,7 @@ import TicketList from '../../components/TicketManagement/TicketList'
 const DashboardPage = () => {
   return (
     <SidebarWithHeader>
-      <Dashboard />
+      {/* <Dashboard /> */}
       <TicketList />
       {/* <BookedTickets/> */}
       {/* <TicketBooking/> */}

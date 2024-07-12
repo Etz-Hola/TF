@@ -41,7 +41,7 @@ const TicketList = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden">
+    <div className=" mx-auto bg-white shadow-md rounded-md overflow-hidden">
         <h1 className="text-xl font-bold mb-4  justify-center ">Ticket DEtails</h1>
       <div className="p-4">
         {tickets.length === 0 && <p className="text-red-600 font-semibold mb-4">No tickets found</p>}
