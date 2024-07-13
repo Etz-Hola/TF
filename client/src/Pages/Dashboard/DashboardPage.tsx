@@ -12,7 +12,7 @@ const DashboardPage = () => {
   return (
     <SidebarWithHeader>
       {/* <Dashboard /> */}
-      <TicketList />
+      {/* <TicketList /> */}
       {/* <BookedTickets/> */}
       {/* <TicketBooking/> */}
       
